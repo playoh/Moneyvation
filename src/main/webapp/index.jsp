@@ -1,12 +1,37 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
+<%
+  String pageParam = request.getParameter("page");
+  if (pageParam == null) pageParam = "home";
+
+  String view;
+  switch (pageParam) {
+    case "goal-detail":
+      view = "/pages/goalDetail.jsp";
+      break;
+    case "my-page":
+      view = "/pages/myPage.jsp";
+      break;
+    case "home":
+    default:
+      view = "/pages/home.jsp";
+      break;
+  }
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
-  <title>JSP - Hello World</title>
+  <meta charset="UTF-8" />
+  <title>Moneyvation</title>
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/style.css" />
 </head>
 <body>
-<h1><%= "Hello World!" %></h1>
-<br/>
-<a href="hello-servlet">Hello Servlet</a>
+<%@ include file="/layouts/header.jsp" %>
+
+<main>
+  <jsp:include page="<%=view%>" />
+</main>
+
+<%@ include file="/layouts/footer.jsp" %>
 </body>
 </html>
