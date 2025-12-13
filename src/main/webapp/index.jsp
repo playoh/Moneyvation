@@ -11,9 +11,15 @@
     case "my-page":
       view = "/pages/myPage.jsp";
       break;
+    case "create-goal":
+      view = "/pages/createGoal.jsp";
+      break;
     case "goal-edit":
       view = "/pages/editGoal.jsp";
       break;
+    case "goal-certify":
+      view = "/pages/certifyGoal.jsp";
+      break;g
     case "home":
     default:
       view = "/pages/home.jsp";
