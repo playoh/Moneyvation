@@ -19,7 +19,7 @@
       break;
     case "goal-certify":
       view = "/pages/certifyGoal.jsp";
-      break;g
+      break;
     case "home":
     default:
       view = "/pages/home.jsp";
