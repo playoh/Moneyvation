@@ -1,81 +1,86 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
+<% if ("my-goals".equals(activeTab)) { %>
+<div class="flex-between mb-16">
+    <h2>My Goals</h2>
+    <a class="btn btn-primary" href="<%=request.getContextPath()%>/index.jsp?page=create-goal">
+        Create Goal
+    </a>
+</div>
+
 <%
-    Boolean loggedIn = (Boolean) session.getAttribute("isLoggedIn");
-    if (loggedIn == null) loggedIn = false;
-
-    if (!loggedIn) {
-        response.sendRedirect(request.getContextPath() + "/index.jsp?page=home");
-        return;
+    // ✅ 목업 데이터(나중에 DB로 교체)
+    class MyGoal {
+        int id; String title; String status; Integer daysRemaining; int participants;
+        MyGoal(int id, String t, String s, Integer d, int p){
+            this.id=id; title=t; status=s; daysRemaining=d; participants=p;
+        }
     }
+    java.util.List<MyGoal> myGoals = new java.util.ArrayList<>();
+    myGoals.add(new MyGoal(1,"Complete Marathon Training for 3 Months","active",45,24));
+    myGoals.add(new MyGoal(2,"Read 30 Books This Year","completed",null,15));
+    myGoals.add(new MyGoal(3,"Learn Python Programming","failed",null,8));
 
-    String activeTab = request.getParameter("tab");
-    if (activeTab == null) activeTab = "my-goals";
-
-    // Mock user data
-    String nickname = "Sarah Kim";
-    int goalsCreated = 3, betsPlaced = 12, winRate = 67, wins = 8, losses = 4;
-    int totalProfit = 15000, totalLoss = 6500, netProfit = 8500;
+    String badgeClass = "badge badge-primary";
+    String badgeText = "In Progress";
 %>
 
-<div class="container" style="padding:48px 24px;">
-    <div class="card mb-24" style="background:linear-gradient(135deg,rgba(99,102,241,.06),rgba(79,70,229,.06));">
-        <h2 style="margin-bottom:6px;">Hello, <%=nickname%>!</h2>
-        <p class="muted">
-            You have created <b style="color:var(--color-primary)"><%=goalsCreated%></b> goals
-            and placed <b style="color:var(--color-primary)"><%=betsPlaced%></b> bets so far.
-        </p>
-    </div>
+<div style="display:flex;flex-direction:column;gap:12px;">
+    <% for (MyGoal g : myGoals) {
+        if ("active".equals(g.status)) { badgeClass="badge badge-primary"; badgeText="In Progress"; }
+        else if ("completed".equals(g.status)) { badgeClass="badge badge-success"; badgeText="Success"; }
+        else if ("failed".equals(g.status)) { badgeClass="badge badge-danger"; badgeText="Failed"; }
+    %>
+    <div class="card">
+        <div class="flex-between" style="gap:12px;">
+            <div style="display:flex;align-items:center;gap:12px;flex:1;">
+                <span class="<%=badgeClass%>"><%=badgeText%></span>
 
-    <div class="grid-3 mb-24">
-        <div class="card">
-            <div class="small">Betting Win Rate</div>
-            <div style="font-size:28px;font-weight:900;margin-top:6px;"><%=winRate%>%</div>
-            <div class="small"><%=wins%> Wins <%=losses%> Losses</div>
+                <div style="flex:1;">
+                    <h4 style="margin-bottom:6px;">
+                        <a href="<%=request.getContextPath()%>/index.jsp?page=goal-detail&goalId=<%=g.id%>">
+                            <%=g.title%>
+                        </a>
+                    </h4>
+                    <div class="small">
+                        <% if ("active".equals(g.status)) { %>
+                        D-<%=g.daysRemaining%> ·
+                        <% } %>
+                        <%=g.participants%> participants
+                    </div>
+                </div>
+            </div>
+
+            <!-- ✅ 버튼 3종: 인증/수정/삭제 -->
+            <div class="flex gap-8" style="align-items:center;">
+                <% if ("active".equals(g.status)) { %>
+                <a class="btn btn-outline"
+                   href="<%=request.getContextPath()%>/index.jsp?page=goal-certify&goalId=<%=g.id%>">
+                    인증(사진)
+                </a>
+
+                <a class="btn btn-ghost"
+                   href="<%=request.getContextPath()%>/index.jsp?page=goal-edit&goalId=<%=g.id%>">
+                    수정
+                </a>
+                <% } else { %>
+                <!-- 완료/실패도 수정 허용할거면 여기서 수정 링크 열어도 됨 -->
+                <a class="btn btn-ghost"
+                   href="<%=request.getContextPath()%>/index.jsp?page=goal-edit&goalId=<%=g.id%>">
+                    수정
+                </a>
+                <% } %>
+
+                <form action="<%=request.getContextPath()%>/pages/deleteGoalAction.jsp"
+                      method="post"
+                      onsubmit="return confirm('정말 삭제할까요?');">
+                    <input type="hidden" name="goalId" value="<%=g.id%>"/>
+                    <button class="btn btn-ghost" type="submit" style="color:var(--color-danger);">
+                        삭제
+                    </button>
+                </form>
+            </div>
         </div>
-        <div class="card" style="background:linear-gradient(135deg,rgba(34,197,94,.06),rgba(34,197,94,.1));">
-            <div class="small">Cumulative Profit</div>
-            <div style="font-size:28px;font-weight:900;margin-top:6px;color:var(--color-success);">+<%=String.format("%,d", totalProfit)%>P</div>
-        </div>
-        <div class="card" style="background:linear-gradient(135deg,rgba(239,68,68,.06),rgba(239,68,68,.1));">
-            <div class="small">Cumulative Loss</div>
-            <div style="font-size:28px;font-weight:900;margin-top:6px;color:var(--color-danger);">-<%=String.format("%,d", totalLoss)%>P</div>
-        </div>
-    </div>
-
-    <div class="card mb-24" style="text-align:center;background:linear-gradient(135deg,rgba(34,197,94,.06),rgba(34,197,94,.12));">
-        <div class="small" style="margin-bottom:6px;">Net Profit/Loss</div>
-        <div style="font-size:42px;font-weight:1000;color:var(--color-success);">+<%=String.format("%,d", netProfit)%>P</div>
-    </div>
-
-    <div class="mb-24">
-        <div style="display:inline-flex;gap:6px;background:#f1f5f9;border-radius:14px;padding:6px;">
-            <a class="btn <%= "my-goals".equals(activeTab) ? "btn-outline" : "btn-ghost" %>"
-               href="<%=request.getContextPath()%>/index.jsp?page=my-page&tab=my-goals">My Goals</a>
-            <a class="btn <%= "my-bets".equals(activeTab) ? "btn-outline" : "btn-ghost" %>"
-               href="<%=request.getContextPath()%>/index.jsp?page=my-page&tab=my-bets">My Bets</a>
-            <a class="btn <%= "statistics".equals(activeTab) ? "btn-outline" : "btn-ghost" %>"
-               href="<%=request.getContextPath()%>/index.jsp?page=my-page&tab=statistics">Statistics</a>
-        </div>
-    </div>
-
-    <% if ("my-goals".equals(activeTab)) { %>
-    <div class="flex-between mb-16">
-        <h2>My Goals</h2>
-        <form action="<%=request.getContextPath()%>/pages/createGoalAction.jsp" method="post">
-            <button class="btn btn-primary" type="submit">Create Goal</button>
-        </form>
-    </div>
-    <div class="card">목업: 내 목표 리스트 영역</div>
-
-    <% } else if ("my-bets".equals(activeTab)) { %>
-    <h2 class="mb-16">My Bets</h2>
-    <div class="card">목업: 내 베팅 리스트 영역</div>
-
-    <% } else { %>
-    <h2 class="mb-16">Detailed Statistics</h2>
-    <div class="grid-2">
-        <div class="card">목업: Bet Wins & Losses</div>
-        <div class="card">목업: Profit & Loss</div>
     </div>
     <% } %>
 </div>
+
+<% } %>

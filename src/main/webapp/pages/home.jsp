@@ -29,8 +29,11 @@
             and prove them wrong while staying motivated!
         </p>
 
-        <form action="<%=request.getContextPath()%>/pages/createGoalAction.jsp" method="post" style="display:inline;">
-            <button class="btn btn-primary" type="submit">Create Goal</button>
+        <a class="btn btn-primary"
+           href="<%=request.getContextPath()%>/index.jsp?page=create-goal">
+            Create Goal
+        </a>
+
         </form>
     </div>
 

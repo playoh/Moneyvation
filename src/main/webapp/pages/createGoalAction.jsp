@@ -6,15 +6,14 @@
         return;
     }
 
-    // 폼 데이터 받기
     String title = request.getParameter("title");
     String description = request.getParameter("description");
 
-    // TODO: 나중에 DB INSERT 처리
-
+    // TODO: DB INSERT 후 생성된 goalId 받아서 detail로 보내기
+    String newGoalId = "1"; // 목업
 %>
 
 <script>
     alert("Your goal has been successfully published!");
-    location.href = "<%=request.getContextPath()%>/index.jsp?page=home";
+    location.href = "<%=request.getContextPath()%>/index.jsp?page=goal-detail&goalId=<%=newGoalId%>";
 </script>
