@@ -5,22 +5,32 @@
         response.sendRedirect(request.getContextPath() + "/index.jsp?page=home&msg=loginRequired");
         return;
     }
+
+    String goalId = request.getParameter("goalId");
+    if (goalId == null) goalId = "1";
+
+    // ✅ 지금은 DB가 없으니까 "목업 데이터"로 기존 값을 미리 채움
+    // 나중에 DB 붙이면: goalId로 SELECT 해서 아래 변수에 넣으면 됨
+    String title = "Complete Marathon Training for 3 Months";
+    String description =
+            "I will complete a full marathon training program over the next 3 months, running at least 5 times per week and gradually increasing distance.";
+    String duration = "90";
+    String verification = "photo";
+    String minBet = "1000";
+    String allowFailure = "yes";
 %>
 
 <div class="container" style="padding:48px 24px; max-width:800px;">
-
-    <!-- Page Title -->
     <div class="mb-24">
-        <h1 style="margin-bottom:8px;">Create a New Goal</h1>
-        <p class="muted">
-            Turn your personal challenge into a public bet and stay motivated.
-        </p>
+        <h1 style="margin-bottom:8px;">Edit Goal</h1>
+        <p class="muted">Update your goal details. Changes will apply immediately.</p>
     </div>
 
-    <!-- Create Goal Form -->
-    <form action="<%=request.getContextPath()%>/pages/createGoalAction.jsp" method="post">
+    <form action="<%=request.getContextPath()%>/pages/updateGoalAction.jsp" method="post">
+        <!-- goalId 유지 -->
+        <input type="hidden" name="goalId" value="<%=goalId%>"/>
 
-        <!-- Goal Title -->
+        <!-- Title -->
         <div class="mb-16">
             <label class="small" style="font-weight:700;color:var(--color-text-primary);">
                 Goal Title
@@ -29,12 +39,12 @@
                     type="text"
                     name="title"
                     class="input"
-                    placeholder="e.g. Wake up at 6 AM for 100 days"
+                    value="<%=title%>"
                     required
             />
         </div>
 
-        <!-- Goal Description -->
+        <!-- Description -->
         <div class="mb-16">
             <label class="small" style="font-weight:700;color:var(--color-text-primary);">
                 Goal Description
@@ -43,9 +53,8 @@
                     name="description"
                     class="input"
                     rows="5"
-                    placeholder="Describe your goal, rules, and how you will verify success."
                     required
-            ></textarea>
+            ><%=description%></textarea>
         </div>
 
         <!-- Duration -->
@@ -57,21 +66,21 @@
                     type="number"
                     name="duration"
                     class="input"
-                    placeholder="e.g. 30"
+                    value="<%=duration%>"
                     min="1"
                     required
             />
         </div>
 
-        <!-- Verification Method -->
+        <!-- Verification -->
         <div class="mb-16">
             <label class="small" style="font-weight:700;color:var(--color-text-primary);">
                 Verification Method
             </label>
             <select name="verification" class="input">
-                <option value="photo">Photo Upload</option>
-                <option value="daily-log">Daily Text Log</option>
-                <option value="external-proof">External Proof (Link / Screenshot)</option>
+                <option value="photo" <%= "photo".equals(verification) ? "selected" : "" %>>Photo Upload</option>
+                <option value="daily-log" <%= "daily-log".equals(verification) ? "selected" : "" %>>Daily Text Log</option>
+                <option value="external-proof" <%= "external-proof".equals(verification) ? "selected" : "" %>>External Proof (Link / Screenshot)</option>
             </select>
         </div>
 
@@ -85,7 +94,7 @@
                         type="number"
                         name="minBet"
                         class="input"
-                        placeholder="e.g. 1000"
+                        value="<%=minBet%>"
                         min="0"
                 />
             </div>
@@ -93,29 +102,28 @@
             <div class="mb-16">
                 <label class="small">Allow Failure Bets?</label>
                 <select name="allowFailure" class="input">
-                    <option value="yes">Yes, allow betting on failure</option>
-                    <option value="no">No, success bets only</option>
+                    <option value="yes" <%= "yes".equals(allowFailure) ? "selected" : "" %>>
+                        Yes, allow betting on failure
+                    </option>
+                    <option value="no" <%= "no".equals(allowFailure) ? "selected" : "" %>>
+                        No, success bets only
+                    </option>
                 </select>
             </div>
         </div>
 
-        <!-- Action Buttons -->
+        <!-- Buttons -->
         <div class="flex gap-12">
             <a
-                    href="<%=request.getContextPath()%>/index.jsp?page=home"
+                    href="<%=request.getContextPath()%>/index.jsp?page=goal-detail&goalId=<%=goalId%>"
                     class="btn btn-ghost"
             >
                 Cancel
             </a>
 
-            <button
-                    type="submit"
-                    class="btn btn-primary"
-                    style="flex:1;"
-            >
-                Publish Goal
+            <button type="submit" class="btn btn-primary" style="flex:1;">
+                Save Changes
             </button>
         </div>
-
     </form>
 </div>
