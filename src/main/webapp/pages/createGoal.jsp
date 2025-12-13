@@ -1,121 +1,21 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
+
+<%
+    String msg = request.getParameter("msg");
+    if ("loginRequired".equals(msg)) {
+%>
+<script>alert('목표를 만들려면 로그인해주세요.');</script>
+<% } %>
+
 <%
     Boolean loggedIn = (Boolean) session.getAttribute("isLoggedIn");
     if (loggedIn == null || !loggedIn) {
+        // 로그인하지 않은 경우 홈으로 돌려보내며 알림 메시지 전달
         response.sendRedirect(request.getContextPath() + "/index.jsp?page=home&msg=loginRequired");
         return;
     }
+
+    // 실제 목표 생성 기능은 추후 구현 예정
+    response.getWriter().println("<script>alert('목표 생성 기능은 추후 구현될 예정입니다.'); location.href='"
+            + request.getContextPath() + "/index.jsp?page=my-page';</script>");
 %>
-
-<div class="container" style="padding:48px 24px; max-width:800px;">
-
-    <!-- Page Title -->
-    <div class="mb-24">
-        <h1 style="margin-bottom:8px;">Create a New Goal</h1>
-        <p class="muted">
-            Turn your personal challenge into a public bet and stay motivated.
-        </p>
-    </div>
-
-    <!-- Create Goal Form -->
-    <form action="<%=request.getContextPath()%>/pages/createGoalAction.jsp" method="post">
-
-        <!-- Goal Title -->
-        <div class="mb-16">
-            <label class="small" style="font-weight:700;color:var(--color-text-primary);">
-                Goal Title
-            </label>
-            <input
-                    type="text"
-                    name="title"
-                    class="input"
-                    placeholder="e.g. Wake up at 6 AM for 100 days"
-                    required
-            />
-        </div>
-
-        <!-- Goal Description -->
-        <div class="mb-16">
-            <label class="small" style="font-weight:700;color:var(--color-text-primary);">
-                Goal Description
-            </label>
-            <textarea
-                    name="description"
-                    class="input"
-                    rows="5"
-                    placeholder="Describe your goal, rules, and how you will verify success."
-                    required
-            ></textarea>
-        </div>
-
-        <!-- Duration -->
-        <div class="mb-16">
-            <label class="small" style="font-weight:700;color:var(--color-text-primary);">
-                Goal Duration (Days)
-            </label>
-            <input
-                    type="number"
-                    name="duration"
-                    class="input"
-                    placeholder="e.g. 30"
-                    min="1"
-                    required
-            />
-        </div>
-
-        <!-- Verification Method -->
-        <div class="mb-16">
-            <label class="small" style="font-weight:700;color:var(--color-text-primary);">
-                Verification Method
-            </label>
-            <select name="verification" class="input">
-                <option value="photo">Photo Upload</option>
-                <option value="daily-log">Daily Text Log</option>
-                <option value="external-proof">External Proof (Link / Screenshot)</option>
-            </select>
-        </div>
-
-        <!-- Betting Settings -->
-        <div class="card mb-24" style="background:#f8fafc;">
-            <h3 style="margin-bottom:12px;">Betting Settings</h3>
-
-            <div class="mb-16">
-                <label class="small">Minimum Bet Amount (P)</label>
-                <input
-                        type="number"
-                        name="minBet"
-                        class="input"
-                        placeholder="e.g. 1000"
-                        min="0"
-                />
-            </div>
-
-            <div class="mb-16">
-                <label class="small">Allow Failure Bets?</label>
-                <select name="allowFailure" class="input">
-                    <option value="yes">Yes, allow betting on failure</option>
-                    <option value="no">No, success bets only</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="flex gap-12">
-            <a
-                    href="<%=request.getContextPath()%>/index.jsp?page=home"
-                    class="btn btn-ghost"
-            >
-                Cancel
-            </a>
-
-            <button
-                    type="submit"
-                    class="btn btn-primary"
-                    style="flex:1;"
-            >
-                Publish Goal
-            </button>
-        </div>
-
-    </form>
-</div>

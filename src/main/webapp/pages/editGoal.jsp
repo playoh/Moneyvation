@@ -9,11 +9,10 @@
     String goalId = request.getParameter("goalId");
     if (goalId == null) goalId = "1";
 
-    // ✅ 지금은 DB가 없으니까 "목업 데이터"로 기존 값을 미리 채움
-    // 나중에 DB 붙이면: goalId로 SELECT 해서 아래 변수에 넣으면 됨
-    String title = "Complete Marathon Training for 3 Months";
+    // 목업 데이터: 실제로는 DB에서 goalId로 조회
+    String title = "3개월 동안 마라톤 훈련 완주하기";
     String description =
-            "I will complete a full marathon training program over the next 3 months, running at least 5 times per week and gradually increasing distance.";
+            "앞으로 3개월 동안 주 5회 이상 달리며 거리를 늘려 풀코스(42.195km)를 완주할 체력을 만드는 것이 목표입니다.";
     String duration = "90";
     String verification = "photo";
     String minBet = "1000";
@@ -22,18 +21,16 @@
 
 <div class="container" style="padding:48px 24px; max-width:800px;">
     <div class="mb-24">
-        <h1 style="margin-bottom:8px;">Edit Goal</h1>
-        <p class="muted">Update your goal details. Changes will apply immediately.</p>
+        <h1 style="margin-bottom:8px;">목표 수정</h1>
+        <p class="muted">목표 정보를 수정하면 즉시 적용됩니다.</p>
     </div>
 
     <form action="<%=request.getContextPath()%>/pages/updateGoalAction.jsp" method="post">
-        <!-- goalId 유지 -->
         <input type="hidden" name="goalId" value="<%=goalId%>"/>
 
-        <!-- Title -->
         <div class="mb-16">
             <label class="small" style="font-weight:700;color:var(--color-text-primary);">
-                Goal Title
+                목표 제목
             </label>
             <input
                     type="text"
@@ -44,10 +41,9 @@
             />
         </div>
 
-        <!-- Description -->
         <div class="mb-16">
             <label class="small" style="font-weight:700;color:var(--color-text-primary);">
-                Goal Description
+                목표 설명
             </label>
             <textarea
                     name="description"
@@ -57,10 +53,9 @@
             ><%=description%></textarea>
         </div>
 
-        <!-- Duration -->
         <div class="mb-16">
             <label class="small" style="font-weight:700;color:var(--color-text-primary);">
-                Goal Duration (Days)
+                목표 기간 (일)
             </label>
             <input
                     type="number"
@@ -72,24 +67,22 @@
             />
         </div>
 
-        <!-- Verification -->
         <div class="mb-16">
             <label class="small" style="font-weight:700;color:var(--color-text-primary);">
-                Verification Method
+                검증 방식
             </label>
             <select name="verification" class="input">
-                <option value="photo" <%= "photo".equals(verification) ? "selected" : "" %>>Photo Upload</option>
-                <option value="daily-log" <%= "daily-log".equals(verification) ? "selected" : "" %>>Daily Text Log</option>
-                <option value="external-proof" <%= "external-proof".equals(verification) ? "selected" : "" %>>External Proof (Link / Screenshot)</option>
+                <option value="photo" <%= "photo".equals(verification) ? "selected" : "" %>>사진 업로드</option>
+                <option value="daily-log" <%= "daily-log".equals(verification) ? "selected" : "" %>>일일 텍스트 로그</option>
+                <option value="external-proof" <%= "external-proof".equals(verification) ? "selected" : "" %>>외부 증빙(링크/스크린샷)</option>
             </select>
         </div>
 
-        <!-- Betting Settings -->
         <div class="card mb-24" style="background:#f8fafc;">
-            <h3 style="margin-bottom:12px;">Betting Settings</h3>
+            <h3 style="margin-bottom:12px;">베팅 설정</h3>
 
             <div class="mb-16">
-                <label class="small">Minimum Bet Amount (P)</label>
+                <label class="small">최소 베팅 금액 (P)</label>
                 <input
                         type="number"
                         name="minBet"
@@ -100,29 +93,28 @@
             </div>
 
             <div class="mb-16">
-                <label class="small">Allow Failure Bets?</label>
+                <label class="small">실패 베팅 허용</label>
                 <select name="allowFailure" class="input">
                     <option value="yes" <%= "yes".equals(allowFailure) ? "selected" : "" %>>
-                        Yes, allow betting on failure
+                        네, 실패 베팅도 허용
                     </option>
                     <option value="no" <%= "no".equals(allowFailure) ? "selected" : "" %>>
-                        No, success bets only
+                        아니오, 성공 베팅만 허용
                     </option>
                 </select>
             </div>
         </div>
 
-        <!-- Buttons -->
         <div class="flex gap-12">
             <a
                     href="<%=request.getContextPath()%>/index.jsp?page=goal-detail&goalId=<%=goalId%>"
                     class="btn btn-ghost"
             >
-                Cancel
+                취소
             </a>
 
             <button type="submit" class="btn btn-primary" style="flex:1;">
-                Save Changes
+                저장하기
             </button>
         </div>
     </form>

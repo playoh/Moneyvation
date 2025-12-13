@@ -1,10 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%
-    // TODO: 실제 파일 저장은 Multipart 처리 필요(commons-fileupload 또는 @MultipartConfig 서블릿)
+    // TODO: 실제 인증 파일 업로드 처리는 Multipart로 구현 필요 (commons-fileupload 또는 @MultipartConfig)
     String goalId = request.getParameter("goalId");
+    if (goalId == null) goalId = "1";
 %>
 
 <script>
-    alert("인증 업로드(목업) 완료!  ※ 실제 파일 저장은 Multipart 설정 후 구현해야 함");
+    alert("인증 사진 업로드가 완료되었습니다! (파일 저장 로직은 추후 구현 예정)");
     location.href = "<%=request.getContextPath()%>/index.jsp?page=my-page&tab=my-goals";
 </script>

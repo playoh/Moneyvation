@@ -9,7 +9,7 @@
     String goalId = request.getParameter("goalId");
     if (goalId == null) goalId = "1";
 
-    // 수정 폼 데이터 받기
+    // 입력값 받기
     String title = request.getParameter("title");
     String description = request.getParameter("description");
     String duration = request.getParameter("duration");
@@ -17,10 +17,10 @@
     String minBet = request.getParameter("minBet");
     String allowFailure = request.getParameter("allowFailure");
 
-    // TODO: 나중에 DB UPDATE 처리 (goalId 기준)
+    // TODO: 실제 DB UPDATE 처리 (goalId 기준)
 %>
 
 <script>
-    alert("Goal has been updated successfully!");
+    alert("목표가 성공적으로 수정되었습니다!");
     location.href = "<%=request.getContextPath()%>/index.jsp?page=goal-detail&goalId=<%=goalId%>";
 </script>

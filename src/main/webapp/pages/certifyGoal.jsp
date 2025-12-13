@@ -12,8 +12,8 @@
 
 <div class="container" style="padding:48px 24px; max-width:800px;">
     <div class="mb-24">
-        <h1 style="margin-bottom:8px;">Certification Upload</h1>
-        <p class="muted">Upload a photo to certify your progress.</p>
+        <h1 style="margin-bottom:8px;">인증 사진 업로드</h1>
+        <p class="muted">진행 상황을 인증할 사진과 메모를 업로드하세요.</p>
     </div>
 
     <div class="card mb-24">
@@ -25,26 +25,26 @@
 
             <div class="mb-16">
                 <label class="small" style="font-weight:700;color:var(--color-text-primary);">
-                    Upload Photo
+                    사진 업로드
                 </label>
                 <input class="input" type="file" name="photo" accept="image/*" required />
-                <div class="small" style="margin-top:8px;">JPG/PNG recommended</div>
+                <div class="small" style="margin-top:8px;">JPG/PNG 권장</div>
             </div>
 
             <div class="mb-16">
                 <label class="small" style="font-weight:700;color:var(--color-text-primary);">
-                    Note (optional)
+                    메모 (선택)
                 </label>
-                <textarea class="input" name="note" rows="3" placeholder="Write a short note..."></textarea>
+                <textarea class="input" name="note" rows="3" placeholder="간단한 메모를 남겨보세요."></textarea>
             </div>
 
             <div class="flex gap-12">
                 <a class="btn btn-ghost"
                    href="<%=request.getContextPath()%>/index.jsp?page=my-page&tab=my-goals">
-                    Back
+                    돌아가기
                 </a>
                 <button class="btn btn-primary" type="submit" style="flex:1;">
-                    Upload
+                    업로드
                 </button>
             </div>
 

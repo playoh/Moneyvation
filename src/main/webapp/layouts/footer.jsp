@@ -7,8 +7,8 @@
             <div style="font-weight:800;color:var(--color-text-primary);">Moneyvation</div>
         </div>
         <div class="muted" style="max-width:560px;margin:0 auto 10px;">
-            A betting-style goal management service that helps you achieve goals by overcoming friends' 'failure predictions'.
+            친구들의 “실패 예측”을 이겨내며 목표 달성을 돕는 베팅형 목표 관리 서비스입니다.
         </div>
-        <div class="small">© 2025 Moneyvation. All rights reserved.</div>
+        <div class="small">© 2025 Moneyvation. 모든 권리 보유.</div>
     </div>
 </footer>

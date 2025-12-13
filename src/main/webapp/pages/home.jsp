@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%
-    // Mock goals
+    // 목업 목표 데이터
     class Goal {
         int id; String title; String author; String description;
         int daysRemaining; int participants; int successRate; int failureRate;
@@ -10,45 +10,43 @@
         }
     }
     java.util.List<Goal> goals = new java.util.ArrayList<>();
-    goals.add(new Goal(1,"Complete Marathon Training for 3 Months","Sarah Kim","I will complete a full marathon training program over the next 3 months...",45,24,65,35));
-    goals.add(new Goal(2,"Read 50 Books This Year","John Park","Challenge myself to read 50 books across various genres...",180,18,55,45));
-    goals.add(new Goal(3,"Learn JavaScript and Build 5 Projects","Mike Lee","Master JavaScript fundamentals and build 5 complete web projects...",120,32,72,28));
-    goals.add(new Goal(4,"Lose 10kg Through Diet and Exercise","Emily Chen","Reach my target weight through consistent healthy eating...",90,41,48,52));
-    goals.add(new Goal(5,"Save $10,000 for Dream Vacation","David Kim","Set aside money each month to save up for a dream trip...",240,15,60,40));
-    goals.add(new Goal(6,"Wake Up at 6 AM Every Day for 100 Days","Lisa Wang","Build a morning routine by waking up at 6 AM consistently...",67,28,42,58));
+    goals.add(new Goal(1,"3개월 동안 마라톤 훈련 완주하기","Sarah Kim","3개월 동안 주 5회 이상 달리며 풀코스 마라톤을 완주할 체력을 만든다.",45,24,65,35));
+    goals.add(new Goal(2,"올해 책 50권 읽기","John Park","한 해 동안 소설, 논픽션, 자기계발 등 다양한 장르의 책 50권을 읽는다.",180,18,55,45));
+    goals.add(new Goal(3,"자바스크립트 배우고 5개 프로젝트 만들기","Mike Lee","JS 기본기를 다지고 개인 프로젝트 5개를 완성해 포트폴리오를 만든다.",120,32,72,28));
+    goals.add(new Goal(4,"식단+운동으로 10kg 감량하기","Emily Chen","꾸준한 식단 관리와 근력+유산소 운동으로 목표 체중에 도달한다.",90,41,48,52));
+    goals.add(new Goal(5,"꿈의 여행자금 1만 달러 모으기","David Kim","매달 저축해 1만 달러를 모아 원하는 여행을 떠난다.",240,15,60,40));
+    goals.add(new Goal(6,"100일 동안 매일 아침 6시 기상","Lisa Wang","아침 루틴을 만들기 위해 100일간 6시에 기상하고 기록을 남긴다.",67,28,42,58));
 %>
 
 <div class="container" style="padding:64px 24px;">
     <div class="center mb-48">
-        <div class="small" style="letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">Betting-style Goal Management</div>
+        <div class="small" style="letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">베팅형 목표 관리</div>
         <h1 style="margin-bottom:16px;background:linear-gradient(90deg,var(--color-primary),var(--color-primary-hover));-webkit-background-clip:text;color:transparent;">
-            Achieve Your Goals with Moneyvation
+            머니베이션과 함께 목표를 이루세요
         </h1>
         <p class="muted" style="font-size:18px;max-width:720px;margin:0 auto 22px;">
-            Turn your goals into exciting challenges. Let your friends bet on your success or failure,
-            and prove them wrong while staying motivated!
+            목표를 흥미로운 도전으로 바꾸세요. 친구들이 성공/실패를 예측하도록 하고,
+            베팅을 이겨내며 동기부여를 유지해보세요!
         </p>
 
         <a class="btn btn-primary"
            href="<%=request.getContextPath()%>/index.jsp?page=create-goal">
-            Create Goal
+            목표 만들기
         </a>
-
-        </form>
     </div>
 
     <div class="card mb-24">
         <div class="grid-2">
             <div>
-                <div class="small" style="margin-bottom:8px;">Status</div>
+                <div class="small" style="margin-bottom:8px;">상태</div>
                 <select class="input">
-                    <option>All Goals</option><option>Active</option><option>Completed</option><option>Failed</option>
+                    <option>모든 목표</option><option>진행중</option><option>완료</option><option>실패</option>
                 </select>
             </div>
             <div>
-                <div class="small" style="margin-bottom:8px;">Sort By</div>
+                <div class="small" style="margin-bottom:8px;">정렬 기준</div>
                 <select class="input">
-                    <option>Most Recent</option><option>Most Popular</option><option>Ending Soon</option><option>Highest Stakes</option>
+                    <option>최신순</option><option>인기순</option><option>마감 임박</option><option>베팅액 높은 순</option>
                 </select>
             </div>
         </div>
@@ -65,19 +63,19 @@
             <div style="display:flex;flex-direction:column;gap:14px;">
                 <div>
                     <h3 style="margin-bottom:6px;"><%=g.title%></h3>
-                    <div class="small">by <%=g.author%></div>
+                    <div class="small">작성자 <%=g.author%></div>
                 </div>
                 <div class="muted"><%=desc%></div>
 
                 <div class="flex gap-12 small">
                     <div>D-<%=g.daysRemaining%></div>
-                    <div><%=g.participants%> people</div>
+                    <div><%=g.participants%>명 참여</div>
                 </div>
 
                 <div>
                     <div class="flex-between small" style="margin-bottom:8px;">
-                        <span style="color:var(--color-success);font-weight:700;">Success <%=g.successRate%>%</span>
-                        <span style="color:var(--color-danger);font-weight:700;">Failure <%=g.failureRate%>%</span>
+                        <span style="color:var(--color-success);font-weight:700;">성공 <%=g.successRate%>%</span>
+                        <span style="color:var(--color-danger);font-weight:700;">실패 <%=g.failureRate%>%</span>
                     </div>
                     <div style="position:relative;height:10px;background:#f1f5f9;border-radius:999px;overflow:hidden;">
                         <div style="position:absolute;left:0;top:0;height:100%;width:<%=g.successRate%>%;background:var(--color-success);"></div>

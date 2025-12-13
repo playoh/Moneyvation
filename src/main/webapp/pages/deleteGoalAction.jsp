@@ -7,8 +7,12 @@
     }
 
     String goalId = request.getParameter("goalId");
-    // TODO: DB DELETE where id=goalId
+    if (goalId == null) goalId = "1";
 
-    response.getWriter().println("<script>alert('삭제 완료!'); location.href='"
-            + request.getContextPath() + "/index.jsp?page=my-page&tab=my-goals';</script>");
+    // TODO: DB DELETE 처리 (id=goalId)
 %>
+
+<script>
+    alert("목표 삭제가 완료되었습니다!");
+    location.href = "<%=request.getContextPath()%>/index.jsp?page=my-page&tab=my-goals";
+</script>
