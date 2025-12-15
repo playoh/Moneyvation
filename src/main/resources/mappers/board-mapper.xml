@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="Board">
+<mapper namespace="org.example.moneyvation.dao.BoardMapper">
     <insert id="insertBoard">
         insert into BOARD ( title, writer, content)
         values
@@ -15,13 +15,13 @@
     <delete id="deleteBoard">
         delete from BOARD where seq=#{seq}
     </delete>
-    <select id="getBoard" resultType="board">
+    <select id="getBoard" resultType="org.example.moneyvation.vo.BoardVO">
         select * from BOARD where seq=#{seq}
     </select>
-    <select id="getBoardCnt" resultType="Integer">
+    <select id="getBoardCnt" resultType="org.example.moneyvation.vo.BoardVO">
         select count(*) from BOARD
     </select>
-    <select id="getBoardList" resultType="board">
+    <select id="getBoardList" resultType="org.example.moneyvation.vo.BoardVO">
         select * from BOARD order by seq desc
     </select>
 </mapper>
