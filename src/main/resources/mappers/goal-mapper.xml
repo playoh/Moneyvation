@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.example.moneyvation.dao.GoalMapper">
+
+    <!-- 목표 생성 (Insert) -->
+    <!-- useGeneratedKeys="true" keyProperty="goalId"를 쓰면
+         INSERT 직후 생성된 PK값(goalId)이 VO에 담겨서 돌아옵니다. -->
+    <insert id="insertGoal" useGeneratedKeys="true" keyProperty="goalId">
+        INSERT INTO goal (
+            title, description, author, duration,
+            verification_type, min_bet, allow_failure, created_at
+        ) VALUES (
+                     #{title}, #{description}, #{author}, #{duration},
+                     #{verificationType}, #{minBet}, #{allowFailure}, NOW()
+                 )
+    </insert>
+
+    <!-- 목표 수정 (Update) -->
+    <update id="updateGoal">
+        UPDATE goal
+        SET
+            title = #{title},
+            description = #{description},
+            duration = #{duration},
+            verification_type = #{verificationType},
+            min_bet = #{minBet},
+            allow_failure = #{allowFailure}
+        WHERE goal_id = #{goalId}
+    </update>
+
+    <!-- 목표 삭제 (Delete) -->
+    <delete id="deleteGoal">
+        DELETE FROM goal WHERE goal_id = #{goalId}
+    </delete>
+
+    <!-- 상세 조회 (Select One) -->
+    <select id="getGoal" resultType="org.example.moneyvation.vo.GoalVO">
+        SELECT
+            goal_id as goalId,
+            title,
+            description,
+            author,
+            duration,
+            verification_type as verificationType,
+            min_bet as minBet,
+            allow_failure as allowFailure,
+            created_at as createdAt,
+            -- 아래는 통계 임시값 (추후 서브쿼리나 JOIN으로 변경 필요)
+            0 as totalParticipants,
+            0 as totalBetAmount,
+            50 as successRate,
+            50 as failureRate,
+            -- 남은 기간 계산 (생성일 + 기간 - 오늘)
+            DATEDIFF(DATE_ADD(created_at, INTERVAL duration DAY), NOW()) as daysRemaining
+        FROM goal
+        WHERE goal_id = #{goalId}
+    </select>
+
+    <!-- 목록 조회 (Select List) -->
+    <select id="getGoalList" resultType="org.example.moneyvation.vo.GoalVO">
+        SELECT
+            goal_id as goalId,
+            title,
+            description,
+            author,
+            duration,
+            verification_type as verificationType,
+            min_bet as minBet,
+            allow_failure as allowFailure,
+            created_at as createdAt,
+            DATEDIFF(DATE_ADD(created_at, INTERVAL duration DAY), NOW()) as daysRemaining
+        FROM goal
+        ORDER BY goal_id DESC
+    </select>
+
+</mapper>
