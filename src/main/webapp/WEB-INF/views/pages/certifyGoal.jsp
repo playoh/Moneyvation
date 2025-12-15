@@ -17,7 +17,7 @@
     </div>
 
     <div class="card mb-24">
-        <form action="<%=request.getContextPath()%>/pages/certifyGoalAction.jsp"
+        <form action="<%=request.getContextPath()%>/WEB-INF/views/pages/certifyGoalAction.jsp"
               method="post"
               enctype="multipart/form-data">
 

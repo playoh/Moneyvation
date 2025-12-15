@@ -14,5 +14,5 @@
 
 <script>
     alert("목표 삭제가 완료되었습니다!");
-    location.href = "<%=request.getContextPath()%>/index.jsp?page=my-page&tab=my-goals";
+    location.href = "../../../index.jsp";
 </script>

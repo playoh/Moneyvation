@@ -61,7 +61,7 @@
     <% if ("my-goals".equals(activeTab)) { %>
     <div class="flex-between mb-16">
         <h2>내 목표</h2>
-        <form action="<%=request.getContextPath()%>/pages/createGoalAction.jsp" method="post">
+        <form action="<%=request.getContextPath()%>/WEB-INF/views/pages/createGoalAction.jsp" method="post">
             <button class="btn btn-primary" type="submit">목표 만들기</button>
         </form>
     </div>

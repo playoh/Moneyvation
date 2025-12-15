@@ -12,6 +12,8 @@
 
     <!-- 1. Spring MVC 설정 (기존 유지) -->
     <mvc:annotation-driven />
+    <!-- 정적 리소스(CSS, JS, 이미지)는 스프링이 처리하지 말고 그냥 보내줘라 -->
+    <mvc:resources mapping="/resources/**" location="/resources/" />
 
     <!-- 패키지명은 본인 프로젝트에 맞게 수정 (중요!) -->
     <context:component-scan base-package="org.example.moneyvation" />

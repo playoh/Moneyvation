@@ -22,5 +22,5 @@
 
 <script>
     alert("목표가 성공적으로 수정되었습니다!");
-    location.href = "<%=request.getContextPath()%>/index.jsp?page=goal-detail&goalId=<%=goalId%>";
+    location.href = "../../../index.jsp";
 </script>

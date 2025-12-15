@@ -15,5 +15,5 @@
 
 <script>
     alert("목표가 성공적으로 발행되었습니다!");
-    location.href = "<%=request.getContextPath()%>/index.jsp?page=goal-detail&goalId=<%=newGoalId%>";
+    location.href = "../../../index.jsp";
 </script>

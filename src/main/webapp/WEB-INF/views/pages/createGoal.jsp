@@ -5,7 +5,7 @@
 <c:if test="${empty sessionScope.isLoggedIn or not sessionScope.isLoggedIn}">
     <script>
         alert('로그인이 필요한 서비스입니다.');
-        location.href = '${pageContext.request.contextPath}/index.jsp?page=home';
+        location.href = '../../../index.jsp';
     </script>
 </c:if>
 

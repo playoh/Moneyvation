@@ -7,5 +7,5 @@
 
 <script>
     alert("인증 사진 업로드가 완료되었습니다! (파일 저장 로직은 추후 구현 예정)");
-    location.href = "<%=request.getContextPath()%>/index.jsp?page=my-page&tab=my-goals";
+    location.href = "../../../index.jsp";
 </script>

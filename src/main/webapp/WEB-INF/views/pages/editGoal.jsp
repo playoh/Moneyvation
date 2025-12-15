@@ -25,7 +25,7 @@
         <p class="muted">목표 정보를 수정하면 즉시 적용됩니다.</p>
     </div>
 
-    <form action="<%=request.getContextPath()%>/pages/updateGoalAction.jsp" method="post">
+    <form action="<%=request.getContextPath()%>/WEB-INF/views/pages/updateGoalAction.jsp" method="post">
         <input type="hidden" name="goalId" value="<%=goalId%>"/>
 
         <div class="mb-16">
