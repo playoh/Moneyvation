@@ -51,9 +51,13 @@ public class UserController {
         }
     }
 
-    @GetMapping("/logout")
+    @GetMapping("/logout") // 사용자가 /user/logout 주소를 치면 이 메소드가 "액션"을 수행함
     public String logout(HttpSession session) {
+
         session.invalidate();
+
+        System.out.println("로그아웃 완료!");
+
         return "redirect:/";
     }
 }

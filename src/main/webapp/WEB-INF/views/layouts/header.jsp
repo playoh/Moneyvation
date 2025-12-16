@@ -32,9 +32,9 @@
 
             <!-- 5. 로그아웃 버튼 -->
             <!-- 컨트롤러의 @RequestMapping("/logout") 으로 요청 -->
-            <form action="<%=request.getContextPath()%>/logout" method="post" style="display:inline;">
-                <button class="btn btn-ghost" type="submit">로그아웃</button>
-            </form>
+            <a href="${pageContext.request.contextPath}/user/logout" class="btn btn-ghost">
+                로그아웃
+            </a>
             <% } %>
         </div>
     </div>

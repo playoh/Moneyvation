@@ -4,7 +4,7 @@
 <div class="login-container" style="text-align: center; margin-top: 50px;">
   <h2>로그인</h2>
 
-  <form action="<c:url value='/user/login'/>" method="post">
+  <form action="${pageContext.request.contextPath}/user/login" method="post">
     <div style="margin-bottom: 10px;">
       <input type="text" name="userId" placeholder="아이디" required style="padding: 10px; width: 200px;">
     </div>
