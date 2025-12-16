@@ -60,4 +60,38 @@ public class UserController {
 
         return "redirect:/";
     }
+
+    @GetMapping("/my-page")
+    public String myPage(@RequestParam(value = "tab", defaultValue = "my-goals") String tab,
+                         HttpSession session,
+                         Model model) {
+
+        // 1. 로그인 체크 (로그인 안 했으면 로그인 화면으로 튕기기)
+        if (session.getAttribute("isLoggedIn") == null) {
+            return "redirect:/user/login-form";
+        }
+
+        // 2. 목업 데이터 준비 (나중에는 DB에서 가져오는 코드로 바뀔 예정)
+        // 일단 JSP에 있던 변수들을 여기서 모델에 담아줍니다.
+        model.addAttribute("nickname", session.getAttribute("userName")); // 세션에 저장된 이름 사용
+        model.addAttribute("goalsCreated", 3);
+        model.addAttribute("betsPlaced", 12);
+        model.addAttribute("winRate", 67);
+        model.addAttribute("wins", 8);
+        model.addAttribute("losses", 4);
+
+        // 숫자 포맷팅을 위해 미리 문자로 만들어 보내거나, JSP에서 fmt 태그를 써도 됩니다.
+        // 여기서는 편의상 숫자로 그냥 보냅니다.
+        model.addAttribute("totalProfit", 15000);
+        model.addAttribute("totalLoss", 6500);
+        model.addAttribute("netProfit", 8500);
+
+        // 3. 현재 선택된 탭 정보 넘기기
+        model.addAttribute("activeTab", tab);
+
+        // 4. 페이지 정보 설정 (index.jsp가 알 수 있게)
+        model.addAttribute("page", "my-page");
+
+        return "index"; // index.jsp로 이동
+    }
 }

@@ -28,7 +28,7 @@
             <% } else { %>
             <!-- 4. 마이페이지 버튼 -->
             <!-- 컨트롤러의 /mypage 경로로 이동 (만드셔야 함) -->
-            <a class="btn btn-outline" href="<%=request.getContextPath()%>/myPage">마이페이지</a>
+            <a class="btn btn-outline" href="${pageContext.request.contextPath}/user/my-page">마이페이지</a>
 
             <!-- 5. 로그아웃 버튼 -->
             <!-- 컨트롤러의 @RequestMapping("/logout") 으로 요청 -->
