@@ -7,6 +7,7 @@
         <setting name="mapUnderscoreToCamelCase" value="true"/>
     </settings>
     <typeAliases>
-        <typeAlias alias="board" type="org.example.moneyvation.vo.BoardVO" />
+        <typeAlias alias="goal" type="org.example.moneyvation.vo.GoalVO"/>
+        <typeAlias alias="user" type="org.example.moneyvation.vo.UserVO"/>
     </typeAliases>
 </configuration>

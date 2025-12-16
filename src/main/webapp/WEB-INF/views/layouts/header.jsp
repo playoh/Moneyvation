@@ -18,7 +18,7 @@
             <% if (!loggedIn) { %>
             <!-- 2. 로그인 버튼 -->
             <!-- 컨트롤러의 @GetMapping("/login") 으로 이동 -->
-            <a href="<%=request.getContextPath()%>/login" class="btn btn-ghost">로그인</a>
+            <a href="${pageContext.request.contextPath}/user/login-form" class="btn btn-ghost">로그인</a>
 
             <!-- 3. 회원가입 버튼 -->
             <button class="btn btn-primary" type="button"
@@ -28,7 +28,7 @@
             <% } else { %>
             <!-- 4. 마이페이지 버튼 -->
             <!-- 컨트롤러의 /mypage 경로로 이동 (만드셔야 함) -->
-            <a class="btn btn-outline" href="<%=request.getContextPath()%>/mypage">마이페이지</a>
+            <a class="btn btn-outline" href="<%=request.getContextPath()%>/myPage">마이페이지</a>
 
             <!-- 5. 로그아웃 버튼 -->
             <!-- 컨트롤러의 @RequestMapping("/logout") 으로 요청 -->

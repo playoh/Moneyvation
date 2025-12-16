@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 @Controller
 @RequestMapping("/goal")
@@ -17,45 +16,71 @@ public class GoalController {
     @Autowired
     private GoalMapper goalMapper;
 
-    // 목표 생성
-    // 목표 생성
+    // ==========================================
+    // 1. 화면 이동 기능 (이게 빠져 있었음!)
+    // ==========================================
+
+    /**
+     * [추가됨] 목표 생성 페이지 보여주기
+     * 요청 주소: /goal/create-form
+     */
+    @GetMapping("/create-form")
+    public String moveToCreateForm(Model model) {
+        // index.jsp에게 "create-goal.jsp를 끼워넣어라"라고 지시
+        // 아까 index.jsp에서 고친 이름("create-goal")과 똑같아야 함!
+        model.addAttribute("page", "create-goal");
+        return "index";
+    }
+
+    /**
+     * [추가됨] 목표 수정 페이지 보여주기
+     * 요청 주소: /goal/edit-form?goalId=1
+     */
+    @GetMapping("/edit-form")
+    public String moveToEditForm(@RequestParam("goalId") int goalId, Model model) {
+        // 수정하려면 원래 내용을 채워놔야 하니까 DB에서 가져옴
+        GoalVO goal = goalMapper.getGoal(goalId);
+
+        model.addAttribute("goal", goal);
+        model.addAttribute("page", "edit-goal"); // index.jsp의 조건문 이름과 일치
+        return "index";
+    }
+
+    // ==========================================
+    // 2. 데이터 처리 기능 (원래 있던 것들)
+    // ==========================================
+
+    // 목표 저장 처리
     @PostMapping("/create")
     public String createGoal(GoalVO vo, HttpSession session) {
-        // ... (로그인 체크 로직) ...
+        // (필요 시 로그인 유저 ID 세팅)
         goalMapper.insertGoal(vo);
-
-        // 🚨 수정: JSP가 아니라 Controller의 /detail 경로로 보냅니다!
-        // 이렇게 해야 getGoalDetail() 메서드가 실행되고 -> DB 조회하고 -> 화면 띄웁니다.
         return "redirect:/goal/detail?goalId=" + vo.getGoalId();
     }
 
-    // 목표 수정
+    // 목표 수정 처리
     @PostMapping("/update")
     public String updateGoal(GoalVO vo) {
         goalMapper.updateGoal(vo);
         return "redirect:/goal/detail?goalId=" + vo.getGoalId();
     }
 
-    // 목표 삭제
+    // 목표 삭제 처리
     @RequestMapping("/delete")
     public String deleteGoal(@RequestParam("goalId") int goalId) {
         goalMapper.deleteGoal(goalId);
         return "redirect:/";
-        // 만약 마이페이지 Controller가 있다면 "redirect:/mypage"
     }
 
+    // 목표 상세 보기
     @GetMapping("/detail")
     public String getGoalDetail(@RequestParam("goalId") int goalId, Model model) {
-        // 1. DB에서 목표 상세 정보 가져오기
         GoalVO goal = goalMapper.getGoal(goalId);
-
-        // 2. 모델에 담기
         model.addAttribute("goal", goal);
 
-        // 3. 페이지 껍데기 설정 (index.jsp가 'goal-detail'을 include 하도록)
+        // index.jsp의 "goal-detail" 부분 실행
         model.addAttribute("page", "goal-detail");
 
-        // 4. index.jsp 리턴
         return "index";
     }
 }

@@ -15,5 +15,5 @@
 
 <script>
     alert("목표가 성공적으로 발행되었습니다!");
-    location.href = "../index.jsp";
+    location.href = "../";
 </script>

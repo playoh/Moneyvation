@@ -15,7 +15,7 @@
         </p>
 
         <a class="btn btn-primary"
-           href="<%=request.getContextPath()%>/WEB-INF/views/index.jsp?page=create-goal">
+           href="<c:url value='/goal/create-form'/>">
             목표 만들기
         </a>
     </div>
