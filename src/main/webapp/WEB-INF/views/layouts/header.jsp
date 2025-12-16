@@ -9,9 +9,9 @@
     <div class="container header-inner">
         <!-- 1. 로고 클릭 시 홈으로 이동 -->
         <!-- 컨트롤러가 있으니 이제 ?page=home 파라미터 없이 그냥 루트(/)로 가도 됩니다 -->
-        <a href="<%=request.getContextPath()%>/goal/list" class="logo">
+        <a href="<%=request.getContextPath()%>/ " class="logo">
             <div class="logo-badge">M</div>
-            <div style="font-size:18px;font-weight:800;">Moneyvation</div>
+            <div>Moneyvation</div>
         </a>
 
         <div class="flex gap-12">

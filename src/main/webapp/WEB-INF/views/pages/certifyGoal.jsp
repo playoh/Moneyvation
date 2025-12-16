@@ -40,7 +40,7 @@
 
             <div class="flex gap-12">
                 <a class="btn btn-ghost"
-                   href="<%=request.getContextPath()%>/index.jsp?page=my-page&tab=my-goals">
+                   href="<%=request.getContextPath()%>/WEB-INF/views/index.jsp?page=my-page&tab=my-goals">
                     돌아가기
                 </a>
                 <button class="btn btn-primary" type="submit" style="flex:1;">

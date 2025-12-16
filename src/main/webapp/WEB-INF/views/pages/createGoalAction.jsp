@@ -2,7 +2,7 @@
 <%
     Boolean loggedIn = (Boolean) session.getAttribute("isLoggedIn");
     if (loggedIn == null || !loggedIn) {
-        response.sendRedirect(request.getContextPath() + "/index.jsp?page=home&msg=loginRequired");
+        response.sendRedirect(request.getContextPath() + "/");
         return;
     }
 
@@ -15,5 +15,5 @@
 
 <script>
     alert("목표가 성공적으로 발행되었습니다!");
-    location.href = "../../../index.jsp";
+    location.href = "../index.jsp";
 </script>

@@ -5,7 +5,7 @@
 <c:if test="${empty sessionScope.isLoggedIn or not sessionScope.isLoggedIn}">
     <script>
         alert('로그인이 필요한 서비스입니다.');
-        location.href = '../../../index.jsp';
+        location.href = '../index.jsp';
     </script>
 </c:if>
 
@@ -74,7 +74,7 @@
 
         <!-- 6. 버튼 영역 -->
         <div class="flex gap-12">
-            <a class="btn btn-ghost" href="${pageContext.request.contextPath}/index.jsp?page=home">
+            <a class="btn btn-ghost" href="${pageContext.request.contextPath}/WEB-INF/views/index.jsp?page=home">
                 취소
             </a>
             <button class="btn btn-primary" type="submit" style="flex:1;">

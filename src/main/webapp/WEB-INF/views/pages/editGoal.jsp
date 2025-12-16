@@ -107,7 +107,7 @@
 
         <div class="flex gap-12">
             <a
-                    href="<%=request.getContextPath()%>/index.jsp?page=goal-detail&goalId=<%=goalId%>"
+                    href="<%=request.getContextPath()%>/WEB-INF/views/index.jsp?page=goal-detail&goalId=<%=goalId%>"
                     class="btn btn-ghost"
             >
                 취소

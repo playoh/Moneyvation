@@ -50,11 +50,11 @@
     <div class="mb-24">
         <div style="display:inline-flex;gap:6px;background:#f1f5f9;border-radius:14px;padding:6px;">
             <a class="btn <%= "my-goals".equals(activeTab) ? "btn-outline" : "btn-ghost" %>"
-               href="<%=request.getContextPath()%>/index.jsp?page=my-page&tab=my-goals">내 목표</a>
+               href="<%=request.getContextPath()%>/WEB-INF/views/index.jsp?page=my-page&tab=my-goals">내 목표</a>
             <a class="btn <%= "my-bets".equals(activeTab) ? "btn-outline" : "btn-ghost" %>"
-               href="<%=request.getContextPath()%>/index.jsp?page=my-page&tab=my-bets">내 베팅</a>
+               href="<%=request.getContextPath()%>/WEB-INF/views/index.jsp?page=my-page&tab=my-bets">내 베팅</a>
             <a class="btn <%= "statistics".equals(activeTab) ? "btn-outline" : "btn-ghost" %>"
-               href="<%=request.getContextPath()%>/index.jsp?page=my-page&tab=statistics">통계</a>
+               href="<%=request.getContextPath()%>/WEB-INF/views/index.jsp?page=my-page&tab=statistics">통계</a>
         </div>
     </div>
 

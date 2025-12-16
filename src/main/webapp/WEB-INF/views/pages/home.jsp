@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page isELIgnored="false" %>
 
 
 <div class="container" style="padding:64px 24px;">
@@ -14,7 +15,7 @@
         </p>
 
         <a class="btn btn-primary"
-           href="<%=request.getContextPath()%>/index.jsp?page=create-goal">
+           href="<%=request.getContextPath()%>/WEB-INF/views/index.jsp?page=create-goal">
             목표 만들기
         </a>
     </div>

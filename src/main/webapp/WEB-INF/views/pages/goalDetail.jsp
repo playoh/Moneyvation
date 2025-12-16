@@ -19,7 +19,7 @@
 %>
 
 <div class="container" style="padding:48px 24px;">
-    <a class="btn btn-ghost" href="<%=request.getContextPath()%>/index.jsp?page=home" style="padding:0;">
+    <a class="btn btn-ghost" href="<%=request.getContextPath()%>/WEB-INF/views/index.jsp?page=home" style="padding:0;">
         ← 목표 목록으로 돌아가기
     </a>
 

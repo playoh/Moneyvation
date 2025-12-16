@@ -14,5 +14,5 @@
 
 <script>
     alert("목표 삭제가 완료되었습니다!");
-    location.href = "../../../index.jsp";
+    location.href = "../index.jsp";
 </script>
