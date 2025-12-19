@@ -17,7 +17,7 @@
     </div>
 
     <div class="card mb-24">
-        <form action="<%=request.getContextPath()%>/WEB-INF/views/pages/certifyGoalAction.jsp"
+        <form action="${pageContext.request.contextPath}/goal/certify"
               method="post"
               enctype="multipart/form-data">
 
@@ -40,7 +40,7 @@
 
             <div class="flex gap-12">
                 <a class="btn btn-ghost"
-                   href="<%=request.getContextPath()%>/WEB-INF/views/index.jsp?page=my-page&tab=my-goals">
+                   href="${pageContext.request.contextPath}/user/my-page?tab=my-goals">
                     돌아가기
                 </a>
                 <button class="btn btn-primary" type="submit" style="flex:1;">

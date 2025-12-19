@@ -25,7 +25,7 @@
         <p class="muted">목표 정보를 수정하면 즉시 적용됩니다.</p>
     </div>
 
-    <form action="<%=request.getContextPath()%>/WEB-INF/views/pages/updateGoalAction.jsp" method="post">
+    <form action="${pageContext.request.contextPath}/goal/update" method="post">
         <input type="hidden" name="goalId" value="<%=goalId%>"/>
 
         <div class="mb-16">
@@ -94,7 +94,7 @@
 
             <div class="mb-16">
                 <label class="small">실패 베팅 허용</label>
-                <select name="allowFailure" class="input">
+                <select name="verificationType" class="input">
                     <option value="yes" <%= "yes".equals(allowFailure) ? "selected" : "" %>>
                         네, 실패 베팅도 허용
                     </option>
