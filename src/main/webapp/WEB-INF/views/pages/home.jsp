@@ -39,7 +39,7 @@
                         <div class="muted">${g.description}</div>
 
                         <div class="flex gap-12 small">
-                            <div>D-${g.duration}</div>
+                            <div>D-${g.daysRemaining}</div>
                         </div>
                     </div>
                 </a>
