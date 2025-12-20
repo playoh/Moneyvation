@@ -40,8 +40,8 @@
 
             <div class="flex gap-12">
                 <a class="btn btn-ghost"
-                   href="${pageContext.request.contextPath}/user/my-page?tab=my-goals">
-                    돌아가기
+                   href="<c:url value='/?page=certifyGoal&goalId=${g.goalId}'/>"
+                   돌아가기
                 </a>
                 <button class="btn btn-primary" type="submit" style="flex:1;">
                     업로드
