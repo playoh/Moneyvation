@@ -16,13 +16,12 @@
         <div class="goal-detail hero">
             <div class="stack" style="gap:6px; flex:1;">
                 <h1 class="h1">
-                    <c:out value="${goal.title}" default="Complete Marathon Training for 3 Months"/>
+                    <c:out value="${goal.title}" default="Goal Title"/>
                 </h1>
                 <p class="small">
-                    by <c:out value="${goal.author}" default="Sarah Kim"/>
+                    by <c:out value="${goal.author}" default="author"/>
                 </p>
             </div>
-
             <span class="badge badge--primary">Active</span>
         </div>
     </div>
@@ -33,8 +32,7 @@
         <div class="card card-pad-lg">
             <h3 class="h3" style="margin-bottom:10px;">Goal Description</h3>
             <p class="p">
-                <c:out value="${goal.description}"
-                       default="I will complete a full marathon training program over the next 3 months..."/>
+                <c:out value="${goal.description}" default="description"/>
             </p>
 
             <div class="hr"></div>
@@ -60,22 +58,20 @@
             </div>
         </div>
 
-        <!-- Donut (JSP/SVG) -->
+        <!-- Donut -->
         <div class="card card-pad-lg">
             <h3 class="h3" style="margin-bottom:14px;">Betting Status</h3>
 
-            <c:set var="successRate" value="${empty goal.successRate ? 65 : goal.successRate}" />
-            <c:set var="failureRate" value="${empty goal.failureRate ? 35 : goal.failureRate}" />
+            <c:set var="successRate" value="${empty goal.successRate ? 0 : goal.successRate}" />
+            <c:set var="failureRate" value="${empty goal.failureRate ? 0 : goal.failureRate}" />
             <c:set var="totalRate" value="${successRate + failureRate}" />
 
             <div style="display:flex; flex-direction:column; align-items:center; gap:14px;">
                 <div style="width:180px; height:180px; position:relative;">
                     <svg width="180" height="180" viewBox="0 0 180 180" style="transform: rotate(-90deg);">
-                        <!-- bg -->
                         <circle cx="90" cy="90" r="70" fill="none" stroke="#f1f5f9" stroke-width="20"/>
 
-                        <!-- success -->
-                        <c:set var="circ" value="439.8229715" /> <%-- 2*pi*70 --%>
+                        <c:set var="circ" value="439.8229715" />
                         <c:set var="successLen" value="${(successRate/100.0) * circ}" />
                         <c:set var="failureLen" value="${(failureRate/100.0) * circ}" />
 
@@ -84,7 +80,6 @@
                                 stroke-linecap="round"
                                 stroke-dasharray="${successLen} ${circ}"/>
 
-                        <!-- failure -->
                         <circle cx="90" cy="90" r="70" fill="none"
                                 stroke="#ef4444" stroke-width="20"
                                 stroke-linecap="round"
@@ -103,62 +98,23 @@
                 <div class="row" style="gap:14px; flex-wrap:wrap; justify-content:center;">
                     <div class="row" style="gap:8px;">
                         <div style="width:10px; height:10px; border-radius:999px; background:var(--success);"></div>
-                        <div class="small" style="color:#475569;">Success <b style="color:var(--success);"><c:out value="${successRate}"/>%</b></div>
+                        <div class="small" style="color:#475569;">
+                            Success <b style="color:var(--success);"><c:out value="${successRate}"/>%</b>
+                        </div>
                     </div>
                     <div class="row" style="gap:8px;">
                         <div style="width:10px; height:10px; border-radius:999px; background:var(--danger);"></div>
-                        <div class="small" style="color:#475569;">Failure <b style="color:var(--danger);"><c:out value="${failureRate}"/>%</b></div>
+                        <div class="small" style="color:#475569;">
+                            Failure <b style="color:var(--danger);"><c:out value="${failureRate}"/>%</b>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 
-    <!-- Statistics -->
-    <div class="grid grid-3" style="margin-bottom:22px;">
-        <div class="card card-pad-lg">
-            <div class="kpi">
-                <div>
-                    <p class="label">Total Participants</p>
-                    <div class="value">
-                        <c:out value="${empty goal.totalParticipants ? 24 : goal.totalParticipants}"/>
-                    </div>
-                </div>
-                <div class="badge">👥</div>
-            </div>
-        </div>
-
-        <div class="card card-pad-lg">
-            <div class="kpi">
-                <div>
-                    <p class="label">Total Bet Amount</p>
-                    <div class="value">
-                        <c:out value="${empty goal.totalBetAmount ? '48,500P' : goal.totalBetAmount}"/>
-                    </div>
-                </div>
-                <div class="badge">📈</div>
-            </div>
-        </div>
-
-        <div class="card card-pad-lg">
-            <div class="kpi">
-                <div>
-                    <p class="label">Average Bet</p>
-                    <div class="value">
-                        <c:choose>
-                            <c:when test="${goal.totalParticipants > 0}">
-                                <c:out value="${goal.totalBetAmount / goal.totalParticipants}"/>P
-                            </c:when>
-                            <c:otherwise>2,020P</c:otherwise>
-                        </c:choose>
-                    </div>
-                    <div class="small">per person</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Participant Details -->
+    <!-- Participant Details (✅ 분리 출력 확실) -->
     <div class="card card-pad-lg" style="margin-bottom:22px;">
         <div class="toolbar" style="margin-bottom:14px;">
             <h2 class="h2">Participant Details</h2>
@@ -172,8 +128,8 @@
                     <h3 class="h3" style="color:var(--success);">
                         Success Predictions
                         <span class="small" style="margin-left:6px;">
-              (<c:out value="${empty successBets ? 0 : fn:length(successBets)}"/>)
-            </span>
+                          (<c:out value="${empty successBets ? 0 : fn:length(successBets)}"/>)
+                        </span>
                     </h3>
                 </div>
 
@@ -182,7 +138,7 @@
                         <c:when test="${not empty successBets}">
                             <c:forEach var="b" items="${successBets}">
                                 <div class="listItem ok">
-                                    <span class="name"><c:out value="${b.name}"/></span>
+                                    <span class="name"><c:out value="${b.userName}"/></span>
                                     <span class="amt ok"><c:out value="${b.amount}"/>P</span>
                                 </div>
                             </c:forEach>
@@ -201,8 +157,8 @@
                     <h3 class="h3" style="color:var(--danger);">
                         Failure Predictions
                         <span class="small" style="margin-left:6px;">
-              (<c:out value="${empty failureBets ? 0 : fn:length(failureBets)}"/>)
-            </span>
+                          (<c:out value="${empty failureBets ? 0 : fn:length(failureBets)}"/>)
+                        </span>
                     </h3>
                 </div>
 
@@ -211,7 +167,7 @@
                         <c:when test="${not empty failureBets}">
                             <c:forEach var="b" items="${failureBets}">
                                 <div class="listItem bad">
-                                    <span class="name"><c:out value="${b.name}"/></span>
+                                    <span class="name"><c:out value="${b.userName}"/></span>
                                     <span class="amt bad"><c:out value="${b.amount}"/>P</span>
                                 </div>
                             </c:forEach>
@@ -225,26 +181,30 @@
         </div>
     </div>
 
-    <!-- Place Your Bet -->
+    <!-- ✅ Place Your Bet (성공/실패 선택이 실제로 전달되게 수정) -->
     <div class="card card-pad-lg betCard">
         <h2 class="h2" style="margin-bottom:14px;">Place Your Bet</h2>
 
-        <form method="post" action="<c:url value='/bet/create'/>" class="betRow">
+        <form method="post" action="<c:url value='/goal/bet'/>" class="betRow" id="betForm">
             <input type="hidden" name="goalId" value="<c:out value='${goal.goalId}' default='0'/>"/>
 
             <div>
                 <div class="label">Your Prediction</div>
-                <div class="pills">
+
+                <!-- ✅ 라디오를 숨기지 말고(또는 화면 밖으로만) 클릭 시 체크되게 -->
+                <div class="pills" id="betPills">
                     <label class="pill success active">
-                        <input type="radio" name="betType" value="success" checked style="display:none;">
+                        <input type="radio" name="betType" value="SUCCESS" checked class="srOnly">
                         Will Succeed
                     </label>
+
                     <label class="pill failure">
-                        <input type="radio" name="betType" value="failure" style="display:none;">
+                        <input type="radio" name="betType" value="FAIL" class="srOnly">
                         Will Fail
                     </label>
                 </div>
-                <div class="help">※ JSP만으로 토글 UI를 완벽히 하려면 약간의 JS가 필요해요. 일단은 기본값 success로 제출되게 해두었고, 원하면 “JSP + 아주 짧은 inline JS”로 토글 활성화도 해줄게.</div>
+
+                <div class="help">선택한 예측(SUCCESS/FAIL)이 그대로 저장됩니다.</div>
             </div>
 
             <div>
@@ -254,12 +214,47 @@
 
             <button class="btn btn--primary btn--lg btn--full" type="submit">Place Bet Now</button>
 
-            <c:if test="${empty sessionScope.loginUser}">
+            <c:if test="${sessionScope.isLoggedIn ne true}">
                 <div class="small" style="margin-top:6px;">
-                    로그인하지 않으면 베팅이 제한될 수 있어요. <a style="color:var(--primary); font-weight:900;" href="<c:url value='/user/login-form'/>">로그인 하러가기</a>
+                    로그인하지 않으면 베팅이 제한될 수 있어요.
+                    <a style="color:var(--primary); font-weight:900;" href="<c:url value='/user/login-form'/>">로그인 하러가기</a>
                 </div>
             </c:if>
         </form>
     </div>
 
 </div>
+
+<!-- ✅ 필수: pill 클릭 시 active 토글 + 라디오 체크 반영 -->
+<script>
+    (function () {
+        const pills = document.getElementById('betPills');
+        if (!pills) return;
+
+        const labels = pills.querySelectorAll('label.pill');
+        labels.forEach(label => {
+            label.addEventListener('click', () => {
+                labels.forEach(l => l.classList.remove('active'));
+                label.classList.add('active');
+
+                const radio = label.querySelector('input[type="radio"]');
+                if (radio) radio.checked = true;
+            });
+        });
+    })();
+</script>
+
+<!-- ✅ srOnly: input은 접근성 유지하며 화면에서만 숨김 -->
+<style>
+    .srOnly{
+        position:absolute !important;
+        width:1px !important;
+        height:1px !important;
+        padding:0 !important;
+        margin:-1px !important;
+        overflow:hidden !important;
+        clip:rect(0,0,0,0) !important;
+        white-space:nowrap !important;
+        border:0 !important;
+    }
+</style>
