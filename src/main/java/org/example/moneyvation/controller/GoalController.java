@@ -50,13 +50,33 @@ public class GoalController {
         List<BetVO> successBets = betMapper.getBetsByGoalAndType(goalId, "SUCCESS");
         List<BetVO> failureBets = betMapper.getBetsByGoalAndType(goalId, "FAIL");
 
+        // ✅ 인원수 기반 계산 (한 사람당 1행 구조라 length가 곧 인원수)
+        int successCount = (successBets == null) ? 0 : successBets.size();
+        int failureCount = (failureBets == null) ? 0 : failureBets.size();
+        int total = successCount + failureCount;
+
+        int successRate = 0;
+        int failureRate = 0;
+
+        if (total > 0) {
+            // 반올림(사람 기준)
+            successRate = (int) Math.round(successCount * 100.0 / total);
+            failureRate = 100 - successRate; // ✅ 합이 100 되게 보정
+        }
+
         model.addAttribute("goal", goal);
         model.addAttribute("successBets", successBets);
-        model.addAttribute("failureBets", failureBets); // ✅ failBets → failureBets
+        model.addAttribute("failureBets", failureBets);
+
+        // ✅ 도넛용 값 추가
+        model.addAttribute("successRateByCount", successRate);
+        model.addAttribute("failureRateByCount", failureRate);
+        model.addAttribute("totalBetters", total);
 
         model.addAttribute("page", "goalDetail");
         return "index";
     }
+
 
     @PostMapping("/create")
     public String createGoal(GoalVO vo, HttpSession session) {
