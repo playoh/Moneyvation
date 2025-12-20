@@ -29,5 +29,12 @@
           AND b.bet_type = #{betType}
         ORDER BY b.created_at DESC
     </select>
+    <select id="countBetsByGoalAndType" resultType="int">
+        SELECT COUNT(*)
+        FROM bets
+        WHERE goal_id = #{goalId}
+          AND bet_type = #{betType}
+    </select>
+
 
 </mapper>
