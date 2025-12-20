@@ -19,17 +19,6 @@
 <div class="panel panel-pad section">
     <div class="form-grid">
         <div class="field">
-            <div class="label">Status</div>
-            <select class="select" disabled>
-                <option>All Goals</option>
-                <option>Ongoing</option>
-                <option>Completed</option>
-                <option>Failed</option>
-            </select>
-            <div class="help">UI only (server filtering can be added later)</div>
-        </div>
-
-        <div class="field">
             <div class="label">Sort By</div>
             <select class="select" disabled>
                 <option>Most Recent</option>

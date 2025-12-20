@@ -29,16 +29,26 @@
                         </div>
 
                         <div class="actions">
-                            <a class="btn btn--outline btn--md" href="<c:url value='/goal/edit-form?goalId=${g.goalId}'/>">수정</a>
-                            <a class="btn btn--danger btn--md"
-                               href="<c:url value='/goal/delete?goalId=${g.goalId}'/>"
-                               onclick="return confirm('정말 삭제할까요?');">삭제</a>
+                            <!-- 수정 -->
+                            <a class="btn btn--outline btn--md"
+                               href="<c:url value='/goal/edit-form?goalId=${g.goalId}'/>">수정</a>
+
+                            <!-- ✅ 삭제: 컨트롤러는 POST /goal/delete -->
+                            <form method="post" action="<c:url value='/goal/delete'/>" style="display:inline;">
+                                <input type="hidden" name="goalId" value="${g.goalId}"/>
+                                <button class="btn btn--danger btn--md"
+                                        type="submit"
+                                        onclick="return confirm('정말 삭제할까요?');">삭제</button>
+                            </form>
+
+                            <!-- ✅ 인증: 일단 detail로 이동(거기서 인증 업로드 UI를 붙이는 게 맞음) -->
                             <a class="btn btn--ghost btn--md"
-                               href="<c:url value='/goal/certify-form?goalId=${g.goalId}'/>">인증</a>
+                               href="<c:url value='/goal/detail?goalId=${g.goalId}'/>">인증</a>
                         </div>
                     </div>
                 </c:forEach>
             </c:when>
+
             <c:otherwise>
                 <div class="card card-pad-lg">
                     <h3 class="h3">아직 만든 목표가 없어요</h3>

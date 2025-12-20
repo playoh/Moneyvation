@@ -74,5 +74,22 @@
         FROM goal
         ORDER BY goal_id DESC
     </select>
+    <!-- ✅ 내가 만든 목표 목록 -->
+    <select id="getGoalsByAuthor" resultType="org.example.moneyvation.vo.GoalVO">
+        SELECT
+            goal_id as goalId,
+            title,
+            description,
+            author,
+            duration,
+            verification_type as verificationType,
+            min_bet as minBet,
+            allow_failure as allowFailure,
+            created_at as createdAt,
+            DATEDIFF(DATE_ADD(created_at, INTERVAL duration DAY), NOW()) as daysRemaining
+        FROM goal
+        WHERE author = #{author}
+        ORDER BY goal_id DESC
+    </select>
 
 </mapper>
