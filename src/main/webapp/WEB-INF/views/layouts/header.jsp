@@ -23,7 +23,7 @@
                     </c:when>
 
                     <c:otherwise>
-                        <a class="btn btn--ghost btn--md" href="<c:url value='/user/login-form'/>">로그인</a>
+                        <a class="btn btn--ghost btn--md" href="<c:url value='/user/login-form'/>">Login</a>
                         <a class="btn btn--primary btn--md" href="<c:url value='/user/login-form'/>">회원가입</a>
                     </c:otherwise>
                 </c:choose>

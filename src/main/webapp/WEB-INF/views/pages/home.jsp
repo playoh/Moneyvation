@@ -1,75 +1,121 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<div class="stack">
-    <div class="card card-pad">
-        <div class="row-between">
-            <div>
-                <h1 class="h1">베팅형 목표 관리 - 돈기부여 -</h1>
-                <p class="p">친구의 '실패 예상'을 뒤집어 목표를 달성하는 베팅형 목표 관리 서비스</p>
-            </div>
+<section class="hero">
+    <div class="hero-kicker">BETTING-STYLE GOAL MANAGEMENT</div>
+    <h1 class="hero-title">Achieve Your Goals with Moneyvation</h1>
+    <p class="hero-desc">
+        Turn your goals into exciting challenges. Let your friends bet on your success or failure, and prove them wrong while staying motivated!
+    </p>
 
-            <c:choose>
-                <c:when test="${not empty sessionScope.loginUser}">
-                    <a class="btn btn--primary btn--md" href="<c:url value='/goal/create-form'/>">+ 목표 작성하기</a>
-                </c:when>
-                <c:otherwise>
-                    <!-- 모달 토글 -->
-                    <label class="btn btn--primary btn--md" for="needLoginModal">+ 목표 작성하기</label>
-                </c:otherwise>
-            </c:choose>
-        </div>
-
-        <div class="hr"></div>
-
-        <!-- Accordion: details/summary (JS 없음) -->
-        <div class="acc">
-            <details>
-                <summary>
-                    <span>이 서비스는 어떻게 돌아가나요?</span>
-                    <svg class="acc-chevron" viewBox="0 0 24 24" fill="none">
-                        <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                </summary>
-                <div class="acc-content">
-                    목표를 만들고(오기로), 친구들은 성공/실패에 베팅합니다.
-                    목표를 달성하면 “실패 예상”을 뒤집고, 포인트/보상 구조가 동작합니다.
-                </div>
-            </details>
-        </div>
+    <div class="hero-actions">
+        <a class="btn btn--primary btn--md" href="<c:url value='/goal/create-form'/>">+ Create Goal</a>
+        <a class="btn btn--outline btn--md" href="<c:url value='/user/my-page'/>">My Page</a>
     </div>
+</section>
 
-    <!-- 목표 카드 리스트 -->
-    <div class="goal-grid">
-        <c:forEach var="g" items="${goalList}">
-            <a class="goal-card" href="<c:url value='/goal/detail?goalId=${g.goalId}'/>">
-                <p class="goal-title">${g.title}</p>
-                <p class="p" style="margin-top:6px;"><c:out value="${g.description}"/></p>
+<!-- filters (UI only / 서버 정렬은 추후 확장 가능) -->
+<div class="card card-pad section">
+    <div class="filter-bar">
+        <div class="field">
+            <div class="label">Status</div>
+            <select class="select" name="status" disabled>
+                <option>All Goals</option>
+                <option>Ongoing</option>
+                <option>Completed</option>
+            </select>
+            <div class="subtle">※ 현재는 UI만 적용(서버 필터링은 추후)</div>
+        </div>
 
-                <div class="goal-meta">
-                    <span class="badge badge--outline">기간 ${g.duration}일</span>
-                    <span class="badge badge--outline">검증 ${g.verificationType}</span>
-                    <span class="badge badge--primary">최소 ${g.minBet}P</span>
-                    <span class="badge badge--outline">남은 ${g.daysRemaining}일</span>
-                </div>
-            </a>
-        </c:forEach>
+        <div class="field">
+            <div class="label">Sort By</div>
+            <select class="select" name="sort" disabled>
+                <option>Most Recent</option>
+                <option>Ending Soon</option>
+                <option>Highest Bet</option>
+            </select>
+            <div class="subtle">※ 현재는 UI만 적용(서버 정렬은 추후)</div>
+        </div>
     </div>
 </div>
 
-<!-- ===== 모달(checkbox hack) ===== -->
-<input class="modal-toggle" type="checkbox" id="needLoginModal"/>
+<!-- goal cards -->
+<div class="grid">
+    <c:choose>
+        <c:when test="${not empty goalList}">
+            <c:forEach var="g" items="${goalList}">
+                <div class="card goal-card">
+                    <h3 class="goal-title">
+                        <a href="<c:url value='/goal/detail?goalId=${g.goalId}'/>">${g.title}</a>
+                    </h3>
+                    <div class="goal-meta">by ${g.author}</div>
 
-<label class="modal-overlay" for="needLoginModal"></label>
+                    <div class="goal-desc">
+                        <c:choose>
+                            <c:when test="${not empty g.description}">
+                                ${g.description}
+                            </c:when>
+                            <c:otherwise>
+                                목표 설명이 아직 없습니다.
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
 
-<div class="modal" role="dialog" aria-modal="true">
-    <div class="modal-header">
-        <p class="modal-title">로그인이 필요해요</p>
-        <p class="modal-desc">목표를 작성하려면 먼저 로그인해주세요.</p>
-    </div>
+                    <div class="goal-row">
+                        <span class="pill">D-${g.daysRemaining}</span>
+                        <span class="pill">${g.totalParticipants} people</span>
+                    </div>
 
-    <div class="modal-footer">
-        <label class="btn btn--outline btn--md" for="needLoginModal">닫기</label>
-        <a class="btn btn--primary btn--md" href="<c:url value='/user/login-form'/>">로그인 하러가기</a>
-    </div>
+                    <div class="progress">
+                        <!-- successRate가 0~100이라고 가정 -->
+                        <span style="width:${g.successRate}%;"></span>
+                    </div>
+
+                    <div class="progress-legend">
+                        <span class="ok">Success ${g.successRate}%</span>
+                        <span class="no">Failure ${g.failureRate}%</span>
+                    </div>
+                </div>
+            </c:forEach>
+        </c:when>
+
+        <c:otherwise>
+            <!-- fallback 샘플 -->
+            <div class="card goal-card">
+                <h3 class="goal-title"><a href="#">Complete Marathon Training for 3 Months</a></h3>
+                <div class="goal-meta">by Sarah Kim</div>
+                <div class="goal-desc">I will complete a full marathon training program over the next 3 months, running at least 5 times per week...</div>
+                <div class="goal-row"><span class="pill">D-45</span><span class="pill">24 people</span></div>
+                <div class="progress"><span style="width:65%;"></span></div>
+                <div class="progress-legend"><span class="ok">Success 65%</span><span class="no">Failure 35%</span></div>
+            </div>
+
+            <div class="card goal-card">
+                <h3 class="goal-title"><a href="#">Read 50 Books This Year</a></h3>
+                <div class="goal-meta">by John Park</div>
+                <div class="goal-desc">Challenge myself to read 50 books across various genres throughout the year. Will document my progre...</div>
+                <div class="goal-row"><span class="pill">D-180</span><span class="pill">18 people</span></div>
+                <div class="progress"><span style="width:55%;"></span></div>
+                <div class="progress-legend"><span class="ok">Success 55%</span><span class="no">Failure 45%</span></div>
+            </div>
+
+            <div class="card goal-card">
+                <h3 class="goal-title"><a href="#">Learn JavaScript and Build 5 Projects</a></h3>
+                <div class="goal-meta">by Mike Lee</div>
+                <div class="goal-desc">Master JavaScript fundamentals and build 5 complete web projects from scratch within 6 months.</div>
+                <div class="goal-row"><span class="pill">D-120</span><span class="pill">32 people</span></div>
+                <div class="progress"><span style="width:72%;"></span></div>
+                <div class="progress-legend"><span class="ok">Success 72%</span><span class="no">Failure 28%</span></div>
+            </div>
+
+            <div class="card goal-card">
+                <h3 class="goal-title"><a href="#">Lose 10kg Through Diet and Exercise</a></h3>
+                <div class="goal-meta">by Emily Chen</div>
+                <div class="goal-desc">Reach my target weight through consistent healthy eating and regular exercise routine over 4 months.</div>
+                <div class="goal-row"><span class="pill">D-90</span><span class="pill">41 people</span></div>
+                <div class="progress"><span style="width:48%;"></span></div>
+                <div class="progress-legend"><span class="ok">Success 48%</span><span class="no">Failure 52%</span></div>
+            </div>
+        </c:otherwise>
+    </c:choose>
 </div>

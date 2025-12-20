@@ -2,9 +2,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <%
+  // Controller가 model에 "page"를 넣어주면 그걸 우선 사용
+  String pageAttr = (String)request.getAttribute("page");
+
+  // 혹시 기존 방식(?page=...)도 남아있을 수 있어 fallback 지원
   String pageParam = request.getParameter("page");
-  if (pageParam == null || pageParam.trim().isEmpty()) pageParam = "home";
-  request.setAttribute("pageParam", pageParam);
+
+  String finalPage = pageAttr;
+  if (finalPage == null || finalPage.trim().isEmpty()) finalPage = pageParam;
+  if (finalPage == null || finalPage.trim().isEmpty()) finalPage = "home";
+
+  request.setAttribute("finalPage", finalPage);
 %>
 
 <!DOCTYPE html>
@@ -13,9 +21,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Moneyvation</title>
-
-  <!-- ✅ 캐시 방지용 v 파라미터 -->
-  <link rel="stylesheet" href="<c:url value='/resources/assets/my.css?v=20251220'/>"/>
+  <link rel="stylesheet" href="<c:url value='/resources/assets/my.css'/>"/>
 </head>
 <body>
 
@@ -24,31 +30,31 @@
 <main class="page">
   <div class="container">
     <c:choose>
-      <c:when test="${pageParam == 'home'}">
+      <c:when test="${finalPage == 'home'}">
         <jsp:include page="/WEB-INF/views/pages/home.jsp"/>
       </c:when>
 
-      <c:when test="${pageParam == 'login'}">
+      <c:when test="${finalPage == 'login'}">
         <jsp:include page="/WEB-INF/views/pages/login.jsp"/>
       </c:when>
 
-      <c:when test="${pageParam == 'createGoal'}">
+      <c:when test="${finalPage == 'createGoal'}">
         <jsp:include page="/WEB-INF/views/pages/createGoal.jsp"/>
       </c:when>
 
-      <c:when test="${pageParam == 'goalDetail'}">
+      <c:when test="${finalPage == 'goalDetail'}">
         <jsp:include page="/WEB-INF/views/pages/goalDetail.jsp"/>
       </c:when>
 
-      <c:when test="${pageParam == 'editGoal'}">
+      <c:when test="${finalPage == 'editGoal'}">
         <jsp:include page="/WEB-INF/views/pages/editGoal.jsp"/>
       </c:when>
 
-      <c:when test="${pageParam == 'myPage'}">
+      <c:when test="${finalPage == 'myPage'}">
         <jsp:include page="/WEB-INF/views/pages/myPage.jsp"/>
       </c:when>
 
-      <c:when test="${pageParam == 'certifyGoal'}">
+      <c:when test="${finalPage == 'certifyGoal'}">
         <jsp:include page="/WEB-INF/views/pages/certifyGoal.jsp"/>
       </c:when>
 
