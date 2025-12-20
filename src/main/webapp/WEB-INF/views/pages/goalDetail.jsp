@@ -162,8 +162,6 @@
     <div class="card card-pad-lg" style="margin-bottom:22px;">
         <div class="toolbar" style="margin-bottom:14px;">
             <h2 class="h2">Participant Details</h2>
-            <!-- 모달은 JS 없이 "전체 보기 페이지"로 보내는 방식 추천 -->
-            <a class="btn btn--outline btn--md" href="<c:url value='/goal/participants?goalId=${goal.goalId}'/>">View All</a>
         </div>
 
         <div class="grid grid-2" style="gap:18px;">
