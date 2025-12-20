@@ -55,6 +55,10 @@
         <jsp:include page="/WEB-INF/views/pages/certifyGoal.jsp"/>
       </c:when>
 
+      <c:when test="${finalPage == 'signup'}">
+        <jsp:include page="/WEB-INF/views/pages/signup.jsp"/>
+      </c:when>
+
       <c:otherwise>
         <jsp:include page="/WEB-INF/views/pages/home.jsp"/>
       </c:otherwise>
