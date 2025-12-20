@@ -248,3 +248,132 @@ a:hover{ text-decoration: underline; }
     font-weight: 900;
     color: #374151;
 }
+/* ===== Badge (TSX Badge variants) ===== */
+.badge{
+    display:inline-flex; align-items:center; justify-content:center; gap:6px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--muted);
+    color: #374151;
+    white-space: nowrap;
+}
+.badge--primary{
+    background: var(--brand);
+    border-color: var(--brand);
+    color: #fff;
+}
+.badge--secondary{
+    background: #111827;
+    border-color: #111827;
+    color: #fff;
+}
+.badge--destructive{
+    background: var(--danger);
+    border-color: var(--danger);
+    color: #fff;
+}
+.badge--outline{
+    background: transparent;
+    color: var(--text);
+}
+
+/* ===== Button variants + sizes (TSX Button) ===== */
+.btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--text);
+    cursor:pointer;
+    font-weight: 800;
+    transition: transform .08s ease, background .12s ease, border-color .12s ease, opacity .12s ease;
+    user-select:none;
+}
+.btn:active{ transform: translateY(1px); }
+.btn[disabled]{ opacity:.55; cursor:not-allowed; transform:none; }
+
+/* variants */
+.btn--primary{ background: var(--brand); border-color: var(--brand); color:#fff; }
+.btn--primary:hover{ background:#2760df; border-color:#2760df; }
+.btn--outline{ background: transparent; }
+.btn--secondary{ background: #111827; border-color:#111827; color:#fff; }
+.btn--ghost{ background: transparent; border-color: transparent; }
+.btn--ghost:hover{ background: var(--muted); border-color: var(--border); }
+.btn--link{ background: transparent; border-color: transparent; color: var(--brand); text-decoration: underline; text-underline-offset: 3px; }
+
+/* sizes */
+.btn--sm{ height: 32px; padding: 0 12px; border-radius: 10px; font-size: 13px; }
+.btn--md{ height: 36px; padding: 0 14px; font-size: 14px; }
+.btn--lg{ height: 40px; padding: 0 16px; }
+.btn--icon{ height: 36px; width: 36px; padding: 0; }
+
+/* ===== Breadcrumb (TSX Breadcrumb) ===== */
+.breadcrumb{ display:flex; align-items:center; flex-wrap:wrap; gap: 8px; color: var(--subtext); font-size: 14px; }
+.breadcrumb a{ color: var(--subtext); text-decoration:none; }
+.breadcrumb a:hover{ color: var(--text); text-decoration:none; }
+.breadcrumb__sep{ opacity:.55; }
+.breadcrumb__page{ color: var(--text); font-weight: 700; }
+
+/* ===== Card (TSX Card) ===== */
+.card{ background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+.card__header{ padding: 18px 18px 0; display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
+.card__title{ margin:0; font-size: 18px; font-weight: 900; letter-spacing:-.01em; }
+.card__desc{ margin:6px 0 0; color: var(--subtext); line-height:1.6; }
+.card__content{ padding: 18px; }
+.card__footer{ padding: 0 18px 18px; display:flex; gap:10px; align-items:center; justify-content:flex-end; }
+
+/* ===== Calendar (TSX Calendar 대체: date input 스타일링) ===== */
+.date-input{
+    width: 100%;
+    padding: 11px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background:#fff;
+    font-size: 14px;
+    outline:none;
+}
+.date-input:focus{
+    border-color: rgba(47,109,246,.55);
+    box-shadow: 0 0 0 4px rgba(47,109,246,.12);
+}
+
+/* ===== Carousel (Embla 대체: scroll-snap) ===== */
+.carousel{
+    position: relative;
+}
+.carousel__viewport{
+    overflow: hidden;
+    border-radius: 16px;
+}
+.carousel__track{
+    display:flex;
+    gap: 14px;
+    scroll-snap-type: x mandatory;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 2px; /* shadow clip 방지 */
+    scrollbar-width: none;
+}
+.carousel__track::-webkit-scrollbar{ display:none; }
+.carousel__slide{
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+}
+.carousel__nav{
+    position:absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display:flex;
+    gap:10px;
+    width: 100%;
+    justify-content: space-between;
+    pointer-events:none;
+}
+.carousel__nav .btn{ pointer-events:auto; }
+.carousel__nav .btn--icon{
+    border-radius: 999px;
+    box-shadow: 0 10px 25px rgba(17,24,39,.12);
+}

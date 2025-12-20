@@ -1,121 +1,71 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%
-    Boolean loggedIn = (Boolean) session.getAttribute("isLoggedIn");
-    if (loggedIn == null || !loggedIn) {
-        response.sendRedirect(request.getContextPath() + "/index.jsp?page=home&msg=loginRequired");
-        return;
-    }
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-    String goalId = request.getParameter("goalId");
-    if (goalId == null) goalId = "1";
-
-    // 목업 데이터: 실제로는 DB에서 goalId로 조회
-    String title = "3개월 동안 마라톤 훈련 완주하기";
-    String description =
-            "앞으로 3개월 동안 주 5회 이상 달리며 거리를 늘려 풀코스(42.195km)를 완주할 체력을 만드는 것이 목표입니다.";
-    String duration = "90";
-    String verification = "photo";
-    String minBet = "1000";
-    String allowFailure = "yes";
-%>
-
-<div class="container" style="padding:48px 24px; max-width:800px;">
-    <div class="mb-24">
-        <h1 style="margin-bottom:8px;">목표 수정</h1>
-        <p class="muted">목표 정보를 수정하면 즉시 적용됩니다.</p>
+<c:if test="${empty sessionScope.loginUser}">
+    <div class="alert alert-danger">
+        <p class="alert-title">로그인이 필요합니다</p>
+        <p class="alert-desc">수정은 로그인 이후 가능합니다.</p>
     </div>
+</c:if>
 
-    <form action="${pageContext.request.contextPath}/goal/update" method="post">
-        <input type="hidden" name="goalId" value="<%=goalId%>"/>
-
-        <div class="mb-16">
-            <label class="small" style="font-weight:700;color:var(--color-text-primary);">
-                목표 제목
-            </label>
-            <input
-                    type="text"
-                    name="title"
-                    class="input"
-                    value="<%=title%>"
-                    required
-            />
-        </div>
-
-        <div class="mb-16">
-            <label class="small" style="font-weight:700;color:var(--color-text-primary);">
-                목표 설명
-            </label>
-            <textarea
-                    name="description"
-                    class="input"
-                    rows="5"
-                    required
-            ><%=description%></textarea>
-        </div>
-
-        <div class="mb-16">
-            <label class="small" style="font-weight:700;color:var(--color-text-primary);">
-                목표 기간 (일)
-            </label>
-            <input
-                    type="number"
-                    name="duration"
-                    class="input"
-                    value="<%=duration%>"
-                    min="1"
-                    required
-            />
-        </div>
-
-        <div class="mb-16">
-            <label class="small" style="font-weight:700;color:var(--color-text-primary);">
-                검증 방식
-            </label>
-            <select name="verification" class="input">
-                <option value="photo" <%= "photo".equals(verification) ? "selected" : "" %>>사진 업로드</option>
-                <option value="daily-log" <%= "daily-log".equals(verification) ? "selected" : "" %>>일일 텍스트 로그</option>
-                <option value="external-proof" <%= "external-proof".equals(verification) ? "selected" : "" %>>외부 증빙(링크/스크린샷)</option>
-            </select>
-        </div>
-
-        <div class="card mb-24" style="background:#f8fafc;">
-            <h3 style="margin-bottom:12px;">베팅 설정</h3>
-
-            <div class="mb-16">
-                <label class="small">최소 베팅 금액 (P)</label>
-                <input
-                        type="number"
-                        name="minBet"
-                        class="input"
-                        value="<%=minBet%>"
-                        min="0"
-                />
+<c:if test="${not empty sessionScope.loginUser}">
+    <div class="card card-pad">
+        <div class="row-between">
+            <div>
+                <h2 class="h2">목표 수정</h2>
+                <p class="p">원하는 목표를 더 ‘이기기 쉽게’ 조정해봐요.</p>
             </div>
+            <a class="btn" href="<c:url value='/goal/detail?goalId=${goal.goalId}'/>">취소</a>
+        </div>
 
-            <div class="mb-16">
-                <label class="small">실패 베팅 허용</label>
-                <select name="verificationType" class="input">
-                    <option value="yes" <%= "yes".equals(allowFailure) ? "selected" : "" %>>
-                        네, 실패 베팅도 허용
-                    </option>
-                    <option value="no" <%= "no".equals(allowFailure) ? "selected" : "" %>>
-                        아니오, 성공 베팅만 허용
-                    </option>
-                </select>
+        <div class="hr"></div>
+
+        <form action="<c:url value='/goal/update'/>" method="post" id="editForm">
+            <input type="hidden" name="goalId" value="${goal.goalId}"/>
+
+            <div class="stack">
+                <div>
+                    <label class="p" style="display:block; margin-bottom:6px;">제목</label>
+                    <input class="input" name="title" required value="${goal.title}"/>
+                </div>
+
+                <div>
+                    <label class="p" style="display:block; margin-bottom:6px;">설명</label>
+                    <textarea class="textarea" name="description" required>${goal.description}</textarea>
+                </div>
+
+                <div class="grid-2">
+                    <div>
+                        <label class="p" style="display:block; margin-bottom:6px;">기간(일)</label>
+                        <input class="input" type="number" name="duration" min="1" max="365" required value="${goal.duration}"/>
+                    </div>
+
+                    <div>
+                        <label class="p" style="display:block; margin-bottom:6px;">검증 방식</label>
+                        <select class="select" name="verificationType" required>
+                            <option value="photo" ${goal.verificationType=='photo'?'selected':''}>사진 인증</option>
+                            <option value="text" ${goal.verificationType=='text'?'selected':''}>텍스트 인증</option>
+                            <option value="upload" ${goal.verificationType=='upload'?'selected':''}>파일 업로드</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div>
+                        <label class="p" style="display:block; margin-bottom:6px;">최소 베팅 포인트</label>
+                        <input class="input" type="number" name="minBet" min="0" required value="${goal.minBet}"/>
+                    </div>
+                    <div>
+                        <label class="p" style="display:block; margin-bottom:6px;">실패 허용</label>
+                        <select class="select" name="allowFailure" required>
+                            <option value="true" ${goal.allowFailure==true?'selected':''}>허용</option>
+                            <option value="false" ${goal.allowFailure==false?'selected':''}>불가</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" type="submit" onclick="return confirm('수정할까요?');">수정 저장</button>
             </div>
-        </div>
-
-        <div class="flex gap-12">
-            <a
-                    href="<%=request.getContextPath()%>/WEB-INF/views/index.jsp?page=goal-detail&goalId=<%=goalId%>"
-                    class="btn btn-ghost"
-            >
-                취소
-            </a>
-
-            <button type="submit" class="btn btn-primary" style="flex:1;">
-                저장하기
-            </button>
-        </div>
-    </form>
-</div>
+        </form>
+    </div>
+</c:if>
