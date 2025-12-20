@@ -62,9 +62,9 @@
         <div class="card card-pad-lg">
             <h3 class="h3" style="margin-bottom:14px;">Betting Status</h3>
 
-            <c:set var="successRate" value="${empty goal.successRate ? 0 : goal.successRate}" />
-            <c:set var="failureRate" value="${empty goal.failureRate ? 0 : goal.failureRate}" />
-            <c:set var="totalRate" value="${successRate + failureRate}" />
+            <c:set var="successRate" value="${empty successRateByCount ? 0 : successRateByCount}" />
+            <c:set var="failureRate" value="${empty failureRateByCount ? 0 : failureRateByCount}" />
+            <c:set var="totalBetters" value="${empty totalBetters ? 0 : totalBetters}" />
 
             <div style="display:flex; flex-direction:column; align-items:center; gap:14px;">
                 <div style="width:180px; height:180px; position:relative;">
@@ -91,7 +91,7 @@
                         <div style="font-size:28px; font-weight:900; color:var(--text);">
                             <c:out value="${totalRate}"/>%
                         </div>
-                        <div class="small">Total Bets</div>
+                        <div class="small">Betters: <c:out value="${totalBetters}"/></div>
                     </div>
                 </div>
 
