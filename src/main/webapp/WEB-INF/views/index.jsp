@@ -1,48 +1,56 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <%
-  // 1. Controller 값 확인
-  String pageName = (String) request.getAttribute("page");
-  if (pageName == null) pageName = request.getParameter("page");
-  if (pageName == null || pageName.isEmpty()) pageName = "home";
-
-  String contentPage = "/WEB-INF/views/pages/home.jsp"; // 기본값
-
-  if (pageName.equals("home"))
-    contentPage = "/WEB-INF/views/pages/home.jsp";
-
-  else if (pageName.equals("create-goal"))  // createGoal -> create-goal
-    contentPage = "/WEB-INF/views/pages/createGoal.jsp";
-
-  else if (pageName.equals("goal-detail"))  // goalDetail -> goal-detail
-    contentPage = "/WEB-INF/views/pages/goalDetail.jsp";
-
-  else if (pageName.equals("edit-goal"))    // editGoal -> edit-goal
-    contentPage = "/WEB-INF/views/pages/editGoal.jsp";
-
-  else if (pageName.equals("my-page"))      // myPage -> my-page
-    contentPage = "/WEB-INF/views/pages/myPage.jsp";
-
-  else if (pageName.equals("certify-goal")) // certifyGoal -> certify-goal
-    contentPage = "/WEB-INF/views/pages/certifyGoal.jsp";
-
-  else if (pageName.equals("login"))
-    contentPage = "/WEB-INF/views/pages/login.jsp";
+  String pageParam = request.getParameter("page");
+  if (pageParam == null || pageParam.trim().isEmpty()) pageParam = "home";
+  request.setAttribute("pageParam", pageParam);
 %>
 
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Moneyvation</title>
-  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/style.css">
+  <link rel="stylesheet" href="<c:url value='/assets/my.css'/>"/>
 </head>
 <body>
-<jsp:include page="/WEB-INF/views/layouts/header.jsp" />
+<jsp:include page="/WEB-INF/views/include/header.jsp"/>
 
-<main>
-  <jsp:include page="<%= contentPage %>" />
+<main class="page">
+  <div class="container">
+    <c:choose>
+      <c:when test="${pageParam == 'home'}">
+        <jsp:include page="/WEB-INF/views/pages/home.jsp"/>
+      </c:when>
+      <c:when test="${pageParam == 'login'}">
+        <jsp:include page="/WEB-INF/views/pages/login.jsp"/>
+      </c:when>
+      <c:when test="${pageParam == 'create-goal'}">
+        <jsp:include page="/WEB-INF/views/pages/createGoal.jsp"/>
+      </c:when>
+      <c:when test="${pageParam == 'goal-detail'}">
+        <jsp:include page="/WEB-INF/views/pages/goalDetail.jsp"/>
+      </c:when>
+      <c:when test="${pageParam == 'edit-goal'}">
+        <jsp:include page="/WEB-INF/views/pages/editGoal.jsp"/>
+      </c:when>
+      <c:when test="${pageParam == 'my-page'}">
+        <jsp:include page="/WEB-INF/views/pages/myPage.jsp"/>
+      </c:when>
+      <c:otherwise>
+        <jsp:include page="/WEB-INF/views/pages/home.jsp"/>
+      </c:otherwise>
+    </c:choose>
+  </div>
 </main>
 
-<jsp:include page="/WEB-INF/views/layouts/footer.jsp" />
+<!-- Dialog Overlay (AlertDialog 대체) -->
+<div class="dialog-overlay"></div>
+
+<jsp:include page="/WEB-INF/views/layouts/footer.jsp"/>
+
+<script src="<c:url value='/assets/ui.js'/>"></script>
 </body>
 </html>
