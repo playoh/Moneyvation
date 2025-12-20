@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.example.moneyvation.dao.BetMapper">
+
+    <insert id="insertBet" parameterType="org.example.moneyvation.vo.BetVO">
+        INSERT INTO bets (goal_id, user_id, bet_type, amount)
+        VALUES (#{goalId}, #{userId}, #{betType}, #{amount})
+            ON DUPLICATE KEY UPDATE
+                                 bet_type = VALUES(bet_type),
+                                 amount = VALUES(amount),
+                                 created_at = CURRENT_TIMESTAMP
+    </insert>
+
+    <select id="getBetsByGoalAndType" resultType="org.example.moneyvation.vo.BetVO">
+        SELECT
+            b.bet_id     AS betId,
+            b.goal_id    AS goalId,
+            b.user_id    AS userId,
+            b.bet_type   AS betType,
+            b.amount     AS amount,
+            b.created_at AS createdAt,
+            u.user_name  AS userName
+        FROM bets b
+                 JOIN users u ON u.user_id = b.user_id
+        WHERE b.goal_id = #{param1}
+          AND b.bet_type = #{param2}
+        ORDER BY b.created_at DESC
+    </select>
+
+</mapper>

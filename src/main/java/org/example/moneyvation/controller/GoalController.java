@@ -83,5 +83,38 @@ public class GoalController {
 
         return "redirect:/goal/detail?goalId=" + goalId + "&certified=true";
     }
+    @Autowired
+    private org.example.moneyvation.dao.BetMapper betMapper;
+
+    @PostMapping("/bet")
+    public String placeBet(@RequestParam("goalId") int goalId,
+                           @RequestParam("betType") String betType,
+                           @RequestParam("amount") int amount,
+                           HttpSession session) {
+
+        if (session.getAttribute("isLoggedIn") == null) {
+            return "redirect:/user/login-form";
+        }
+
+        // 기본 검증
+        if (!"SUCCESS".equals(betType) && !"FAIL".equals(betType)) {
+            return "redirect:/goal/detail?goalId=" + goalId + "&betError=type";
+        }
+        if (amount <= 0) {
+            return "redirect:/goal/detail?goalId=" + goalId + "&betError=amount";
+        }
+
+        String userId = (String) session.getAttribute("userId");
+
+        org.example.moneyvation.vo.BetVO bet = new org.example.moneyvation.vo.BetVO();
+        bet.setGoalId(goalId);
+        bet.setUserId(userId);
+        bet.setBetType(betType);
+        bet.setAmount(amount);
+
+        betMapper.insertBet(bet);
+
+        return "redirect:/goal/detail?goalId=" + goalId + "&betSaved=true";
+    }
 }
 
