@@ -20,7 +20,7 @@
   <title>Moneyvation</title>
   <link rel="stylesheet" href="<c:url value='/resources/assets/my.css'/>"/>
 </head>
-<body>
+<body class="page-${finalPage}">
 
 <jsp:include page="/WEB-INF/views/layouts/header.jsp"/>
 

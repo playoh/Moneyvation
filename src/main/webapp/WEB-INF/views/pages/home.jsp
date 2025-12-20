@@ -41,11 +41,13 @@
     </div>
 </div>
 
-<div class="grid">
+<!-- ✅ 여기만 grid → home-grid 로 변경 -->
+<div class="home-grid">
     <c:choose>
         <c:when test="${not empty goalList}">
             <c:forEach var="g" items="${goalList}">
-                <div class="card card-pad card--hover" onclick="location.href='<c:url value='/goal/detail?goalId=${g.goalId}'/>';">
+                <div class="card card-pad card--hover"
+                     onclick="location.href='<c:url value='/goal/detail?goalId=${g.goalId}'/>';">
                     <div style="display:flex; flex-direction:column; gap:12px;">
                         <div style="display:flex; flex-direction:column; gap:6px;">
                             <div class="goal-title">${g.title}</div>

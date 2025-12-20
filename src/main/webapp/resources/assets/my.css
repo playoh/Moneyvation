@@ -348,3 +348,222 @@ img { max-width: 100%; display: block; }
 .auth-foot{ margin-top:10px; font-size:13px; color:#64748b; text-align:center; }
 .link{ color:#6366f1; font-weight:600; text-decoration:none; }
 .link:hover{ text-decoration:underline; }
+
+/* ===============================
+   HOME ONLY (카드 레이아웃 전용)
+   =============================== */
+
+/* HOME 카드 리스트를 3열로 */
+.home-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 24px;
+}
+
+/* 카드가 너무 좌우로 늘어지지 않게 */
+.home-grid .card {
+    height: 100%;
+}
+
+/* hover는 기존 card-hover와 조화 */
+.home-grid .card:hover {
+    transform: translateY(-2px);
+}
+
+/* 반응형 */
+@media (max-width: 980px) {
+    .home-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .home-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =========================
+   Header polish (detail 영향 X)
+   ========================= */
+.header{
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(15,23,42,0.08);
+}
+.header-inner{ height: 68px; }
+
+.logo{
+    font-size: 15px;
+    letter-spacing: -0.01em;
+}
+.logo-badge{
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+    box-shadow: 0 10px 18px rgba(99,102,241,0.18);
+}
+
+/* =========================
+   Footer polish
+   (⚠️ footer.jsp는 footer-inner인데 CSS는 .inner라서 둘 다 커버)
+   ========================= */
+.footer{
+    border-top: 1px solid rgba(15,23,42,0.08);
+    background: #fff;
+}
+.footer .inner,
+.footer-inner{
+    padding: 40px 0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    gap: 10px;
+    color: #64748b;
+}
+.footer .logo,
+.footer-inner .logo{
+    justify-content:center;
+    opacity: 0.98;
+}
+.footer .slogan,
+.footer-inner .slogan{
+    max-width: 760px;
+    line-height: 1.6;
+    font-size: 13px;
+    color: #64748b;
+}
+.footer .copy,
+.footer-inner .copy{
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+/* =========================
+   HOME card typography + layout
+   ========================= */
+
+/* 카드 3열 유지(이미 있음). 간격만 약간 다듬고 싶으면 */
+.home-grid{ gap: 16px; }
+
+/* 카드 내부 기본 간격 */
+.home-grid .card{
+    padding: 18px;
+    cursor: pointer;
+}
+
+/* 제목은 더 크고 두껍게 */
+.home-grid .goal-title{
+    font-size: 16px;
+    font-weight: 950;
+    letter-spacing: -0.02em;
+    line-height: 1.35;
+}
+
+/* 작성자/메타는 가볍게 */
+.home-grid .goal-author{
+    margin-top: 6px;
+    font-size: 12px;
+    color: #94a3b8;
+    font-weight: 700;
+}
+
+/* 설명은 2~3줄 정도만 보이게(카드 높이 안정화) */
+.home-grid .goal-desc{
+    margin-top: 10px;
+    color: #475569;
+    font-size: 13px;
+    line-height: 1.6;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* 메타( D-day / people ) */
+.home-grid .meta{
+    display:flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+}
+.home-grid .meta-item{
+    display:inline-flex;
+    align-items:center;
+    gap: 8px;
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 800;
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(15,23,42,0.08);
+    background: rgba(255,255,255,0.7);
+}
+
+/* 아이콘이 너무 튀면(현재 span.icon) */
+.home-grid .icon{
+    width: 14px;
+    height: 14px;
+    display:inline-block;
+    opacity: 0.7;
+}
+
+/* =========================
+   HOME progress bar (Success/Failure)
+   ========================= */
+
+/* 범례(텍스트) */
+.home-grid .progress-legend{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap: 10px;
+    font-size: 12px;
+    font-weight: 900;
+    margin-top: 14px;
+}
+.home-grid .progress-legend .ok{ color:#16a34a; }
+.home-grid .progress-legend .no{ color:#dc2626; }
+
+/* 바 컨테이너 */
+.home-grid .progress{
+    position: relative;
+    width: 100%;
+    height: 10px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: rgba(15,23,42,0.08);
+    border: 1px solid rgba(15,23,42,0.06);
+}
+
+/* 성공/실패 바 */
+.home-grid .progress .ok{
+    display:block;
+    height: 100%;
+    background: #22c55e;
+    border-radius: 999px 0 0 999px;
+}
+.home-grid .progress .no{
+    display:block;
+    height: 100%;
+    background: #ef4444;
+    border-radius: 0 999px 999px 0;
+}
+
+/* success/failure 값이 0일 때 둥근 모서리 깨짐 방지(선택) */
+.home-grid .progress .ok[style*="width:0"]{ border-radius: 0; }
+.home-grid .progress .no[style*="width:0"]{ border-radius: 0; }
+
+.home-grid .card.card--hover,
+.home-grid .card.card-hover{
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.home-grid .card.card--hover:hover,
+.home-grid .card.card-hover:hover{
+    transform: translateY(-3px);
+    box-shadow: 0 18px 40px rgba(15,23,42,0.12);
+    border-color: rgba(99,102,241,0.18);
+}

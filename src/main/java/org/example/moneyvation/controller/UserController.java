@@ -84,7 +84,7 @@ public class UserController {
     }
 
     // 마이페이지 (기존 유지)
-    @GetMapping("/my-page")
+    @GetMapping("/myPage")
     public String myPage(@RequestParam(value = "tab", defaultValue = "my-goals") String tab,
                          HttpSession session,
                          Model model) {
@@ -105,7 +105,7 @@ public class UserController {
         model.addAttribute("netProfit", 8500);
 
         model.addAttribute("activeTab", tab);
-        model.addAttribute("page", "my-page");
+        model.addAttribute("page", "myPage");
 
         return "index";
     }
