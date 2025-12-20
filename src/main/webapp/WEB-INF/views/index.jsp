@@ -13,10 +13,11 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Moneyvation</title>
-  <link rel="stylesheet" href="<c:url value='/assets/my.css'/>"/>
+  <link rel="stylesheet" href="<c:url value='/resources/assets/my.css'/>"/>
 </head>
 <body>
-<jsp:include page="/WEB-INF/views/include/header.jsp"/>
+
+<jsp:include page="/WEB-INF/views/layouts/header.jsp"/>
 
 <main class="page">
   <div class="container">
@@ -24,21 +25,31 @@
       <c:when test="${pageParam == 'home'}">
         <jsp:include page="/WEB-INF/views/pages/home.jsp"/>
       </c:when>
+
       <c:when test="${pageParam == 'login'}">
         <jsp:include page="/WEB-INF/views/pages/login.jsp"/>
       </c:when>
-      <c:when test="${pageParam == 'create-goal'}">
+
+      <c:when test="${pageParam == 'createGoal'}">
         <jsp:include page="/WEB-INF/views/pages/createGoal.jsp"/>
       </c:when>
-      <c:when test="${pageParam == 'goal-detail'}">
+
+      <c:when test="${pageParam == 'goalDetail'}">
         <jsp:include page="/WEB-INF/views/pages/goalDetail.jsp"/>
       </c:when>
-      <c:when test="${pageParam == 'edit-goal'}">
+
+      <c:when test="${pageParam == 'editGoal'}">
         <jsp:include page="/WEB-INF/views/pages/editGoal.jsp"/>
       </c:when>
-      <c:when test="${pageParam == 'my-page'}">
+
+      <c:when test="${pageParam == 'myPage'}">
         <jsp:include page="/WEB-INF/views/pages/myPage.jsp"/>
       </c:when>
+
+      <c:when test="${pageParam == 'certifyGoal'}">
+        <jsp:include page="/WEB-INF/views/pages/certifyGoal.jsp"/>
+      </c:when>
+
       <c:otherwise>
         <jsp:include page="/WEB-INF/views/pages/home.jsp"/>
       </c:otherwise>
@@ -46,11 +57,7 @@
   </div>
 </main>
 
-<!-- Dialog Overlay (AlertDialog 대체) -->
-<div class="dialog-overlay"></div>
-
 <jsp:include page="/WEB-INF/views/layouts/footer.jsp"/>
 
-<script src="<c:url value='/assets/ui.js'/>"></script>
 </body>
 </html>
