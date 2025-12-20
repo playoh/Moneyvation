@@ -24,7 +24,7 @@
 
                     <c:otherwise>
                         <a class="btn btn--ghost btn--md" href="<c:url value='/user/login-form'/>">Login</a>
-                        <a class="btn btn--primary btn--md" href="<c:url value='/user/login-form'/>">Sign Up</a>
+                        <a class="btn btn--primary btn--md" href="<c:url value='/user/signup-form'/>">Sign Up</a>
                     </c:otherwise>
                 </c:choose>
             </div>
