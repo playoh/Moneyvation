@@ -14,11 +14,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
+
         <junit.version>5.10.2</junit.version>
         <spring.version>5.3.23</spring.version>
 
-        <!-- tomcat7:run 포트 -->
-        <tomcat.port>8080</tomcat.port>
+        <!-- cargo 실행 포트 -->
+        <server.port>8080</server.port>
     </properties>
 
     <dependencies>
@@ -59,6 +60,8 @@
         </dependency>
 
         <!-- 4. Database Driver -->
+        <!-- mysql-connector-java는 굳이 2개 필요없어서(마리아DB 쓰면) 하나로만 가도 됨.
+             하지만 너가 이미 둘 다 넣어둬서, 충돌은 거의 없으니 그대로 유지 가능 -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -70,11 +73,12 @@
             <version>3.1.4</version>
         </dependency>
 
-        <!-- 5. Servlet & JSP (Tomcat 7 호환으로 다운그레이드) -->
+        <!-- 5. Servlet & JSP / JSTL -->
+        <!-- ✅ Tomcat 9 = Servlet 4.0 (javax.servlet.*) -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>3.0.1</version>
+            <version>4.0.1</version>
             <scope>provided</scope>
         </dependency>
 
@@ -106,19 +110,45 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.2</version>
-            </plugin>
-
-            <!-- ✅ mvnw.cmd tomcat7:run -->
-            <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>2.2</version>
                 <configuration>
-                    <port>${tomcat.port}</port>
-                    <path>/</path>
-                    <uriEncoding>UTF-8</uriEncoding>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
+
+            <!-- ✅ Tomcat7 플러그인 제거하고 Cargo로 Tomcat9 실행 -->
+            <plugin>
+                <groupId>org.codehaus.cargo</groupId>
+                <artifactId>cargo-maven3-plugin</artifactId>
+                <version>1.10.25</version>
+
+                <configuration>
+                    <container>
+                        <containerId>tomcat9x</containerId>
+                        <type>embedded</type>
+                    </container>
+
+                    <configuration>
+                        <type>standalone</type>
+                        <home>${project.build.directory}/tomcat9</home>
+                        <properties>
+                            <cargo.servlet.port>8080</cargo.servlet.port>
+                            <cargo.logging>high</cargo.logging>
+                        </properties>
+                    </configuration>
+
+                    <deployables>
+                        <deployable>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>${project.artifactId}</artifactId>
+                            <type>war</type>
+                            <properties>
+                                <context>/</context>
+                            </properties>
+                        </deployable>
+                    </deployables>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 </project>

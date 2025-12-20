@@ -13,7 +13,9 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Moneyvation</title>
-  <link rel="stylesheet" href="<c:url value='/resources/assets/my.css'/>"/>
+
+  <!-- ✅ 캐시 방지용 v 파라미터 -->
+  <link rel="stylesheet" href="<c:url value='/resources/assets/my.css?v=20251220'/>"/>
 </head>
 <body>
 
