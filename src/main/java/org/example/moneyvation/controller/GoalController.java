@@ -1,6 +1,7 @@
 package org.example.moneyvation.controller;
 
 import org.example.moneyvation.dao.GoalMapper;
+import org.example.moneyvation.vo.BetVO;
 import org.example.moneyvation.vo.GoalVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -87,34 +88,27 @@ public class GoalController {
     private org.example.moneyvation.dao.BetMapper betMapper;
 
     @PostMapping("/bet")
-    public String placeBet(@RequestParam("goalId") int goalId,
-                           @RequestParam("betType") String betType,
-                           @RequestParam("amount") int amount,
+    public String placeBet(@RequestParam int goalId,
+                           @RequestParam String betType,
+                           @RequestParam int amount,
                            HttpSession session) {
 
         if (session.getAttribute("isLoggedIn") == null) {
             return "redirect:/user/login-form";
         }
 
-        // 기본 검증
-        if (!"SUCCESS".equals(betType) && !"FAIL".equals(betType)) {
-            return "redirect:/goal/detail?goalId=" + goalId + "&betError=type";
-        }
-        if (amount <= 0) {
-            return "redirect:/goal/detail?goalId=" + goalId + "&betError=amount";
-        }
-
         String userId = (String) session.getAttribute("userId");
 
-        org.example.moneyvation.vo.BetVO bet = new org.example.moneyvation.vo.BetVO();
+        BetVO bet = new BetVO();
         bet.setGoalId(goalId);
         bet.setUserId(userId);
-        bet.setBetType(betType);
+        bet.setBetType(betType); // SUCCESS or FAIL
         bet.setAmount(amount);
 
         betMapper.insertBet(bet);
 
-        return "redirect:/goal/detail?goalId=" + goalId + "&betSaved=true";
+        return "redirect:/goal/detail?goalId=" + goalId;
     }
+
 }
 
