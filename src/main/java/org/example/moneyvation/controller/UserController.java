@@ -16,12 +16,14 @@ public class UserController {
     @Autowired
     private UserMapper userMapper;
 
+    // 로그인 폼
     @GetMapping("/login-form")
     public String showLoginForm(Model model) {
         model.addAttribute("page", "login");
         return "index";
     }
 
+    // 로그인 처리
     @PostMapping("/login")
     public String processLogin(@RequestParam("userId") String userId,
                                @RequestParam("password") String password,
@@ -41,6 +43,7 @@ public class UserController {
         }
     }
 
+    // 로그아웃
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
@@ -48,13 +51,45 @@ public class UserController {
         return "redirect:/";
     }
 
+    // ✅ 회원가입 폼
+    @GetMapping("/signup-form")
+    public String showSignUpForm(Model model) {
+        model.addAttribute("page", "signup");
+        return "index";
+    }
+
+    // ✅ 회원가입 처리
+    @PostMapping("/signup")
+    public String processSignUp(@RequestParam("userId") String userId,
+                                @RequestParam("password") String password,
+                                @RequestParam("userName") String userName) {
+
+        // 1) 중복 체크
+        int count = userMapper.countByUserId(userId);
+        if (count > 0) {
+            return "redirect:/user/signup-form?error=duplicate";
+        }
+
+        // 2) 저장
+        UserVO vo = new UserVO();
+        vo.setUserId(userId);
+        vo.setPassword(password);
+        vo.setUserName(userName); // ✅ 닉네임
+
+        userMapper.insertUser(vo);
+        System.out.println("회원가입 완료: " + userId + " (" + userName + ")");
+
+        // 3) 로그인 페이지로 이동
+        return "redirect:/user/login-form?signup=success";
+    }
+
+    // 마이페이지 (기존 유지)
     @GetMapping("/my-page")
     public String myPage(@RequestParam(value = "tab", defaultValue = "my-goals") String tab,
                          HttpSession session,
                          Model model) {
 
-        Boolean loggedIn = (Boolean) session.getAttribute("isLoggedIn");
-        if (loggedIn == null || !loggedIn) {
+        if (session.getAttribute("isLoggedIn") == null) {
             return "redirect:/user/login-form";
         }
 
@@ -70,9 +105,7 @@ public class UserController {
         model.addAttribute("netProfit", 8500);
 
         model.addAttribute("activeTab", tab);
-
-        // ✅ index.jsp와 일치
-        model.addAttribute("page", "myPage");
+        model.addAttribute("page", "my-page");
 
         return "index";
     }
