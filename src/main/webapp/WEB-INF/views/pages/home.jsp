@@ -11,33 +11,39 @@
 
     <div class="hero-actions">
         <a class="btn btn--primary btn--lg" href="<c:url value='/goal/create-form'/>">+ Create Goal</a>
-        <!-- ✅ UserController는 /user/myPage 이므로 링크 수정 -->
         <a class="btn btn--outline btn--lg" href="<c:url value='/user/myPage'/>">My Page</a>
     </div>
 </section>
 
-<div class="panel panel-pad section">
+<!-- ✅ 정렬/필터 폼 -->
+<form class="panel panel-pad section" method="get" action="<c:url value='/'/>">
     <div class="form-grid">
         <div class="field">
             <div class="label">Sort By</div>
-            <select class="select" disabled>
-                <option>Most Recent</option>
-                <option>Popular</option>
-                <option>Ending Soon</option>
-                <option>Highest Bet</option>
+
+            <!-- ✅ disabled 제거 + name=sort + submit -->
+            <select class="select" name="sort" onchange="this.form.submit()">
+                <option value="recent" <c:if test="${param.sort == null || param.sort == 'recent'}">selected</c:if>>
+                    Most Recent
+                </option>
+                <option value="ending" <c:if test="${param.sort == 'ending'}">selected</c:if>>
+                    Ending Soon
+                </option>
+                <option value="highest" <c:if test="${param.sort == 'highest'}">selected</c:if>>
+                    Highest Bet
+                </option>
             </select>
-            <div class="help">UI only (server sorting can be added later)</div>
+
+            <div class="help">Sorting is applied server-side</div>
         </div>
     </div>
-</div>
+</form>
 
-<!-- ✅ 여기만 grid → home-grid 로 변경 -->
 <div class="home-grid">
     <c:choose>
         <c:when test="${not empty goalList}">
             <c:forEach var="g" items="${goalList}">
 
-                <!-- ✅ (UI 보정) 베팅 인원이 0명이면 bar가 안 보여서 혼란 → bar만 50/50로 표시 -->
                 <c:set var="sr" value="${empty g.successRate ? 0 : g.successRate}" />
                 <c:set var="fr" value="${empty g.failureRate ? 0 : g.failureRate}" />
                 <c:set var="barSr" value="${(sr == 0 && fr == 0) ? 50 : sr}" />
@@ -47,7 +53,6 @@
                      onclick="location.href='<c:url value='/goal/detail?goalId=${g.goalId}'/>';">
 
                     <div style="display:flex; flex-direction:column; gap:12px;">
-
                         <div style="display:flex; flex-direction:column; gap:6px;">
                             <div class="goal-title">${g.title}</div>
                             <div class="goal-author">by ${g.author}</div>
@@ -65,7 +70,6 @@
                             <span class="meta-item"><span class="icon icon--user"></span>${g.totalParticipants} people</span>
                         </div>
 
-                        <!-- ✅ 인원수 기반 퍼센트 (HomeController에서 sr/fr 채워주는 전제) -->
                         <div style="display:flex; flex-direction:column; gap:8px;">
                             <div class="progress-legend">
                                 <span class="ok">Success ${sr}%</span>
@@ -77,52 +81,22 @@
                                 <span class="no" style="width:${barFr}%;"></span>
                             </div>
 
-                            <!-- (선택) 0명일 때 안내 문구 -->
                             <c:if test="${sr == 0 && fr == 0}">
                                 <div class="help" style="margin-top:2px;">아직 베팅이 없어요.</div>
                             </c:if>
                         </div>
-
                     </div>
+
                 </div>
             </c:forEach>
         </c:when>
 
         <c:otherwise>
-            <!-- fallback sample cards -->
-            <div class="card card-pad card--hover">
-                <div style="display:flex; flex-direction:column; gap:12px;">
-                    <div>
-                        <div class="goal-title">Complete Marathon Training for 3 Months</div>
-                        <div class="goal-author">by Sarah Kim</div>
-                    </div>
-                    <div class="goal-desc">I will complete a full marathon training program over the next 3 months, running at least 5 times per week...</div>
-                    <div class="meta">
-                        <span class="meta-item"><span class="icon icon--cal"></span>D-45</span>
-                        <span class="meta-item"><span class="icon icon--user"></span>24 people</span>
-                    </div>
-                    <div style="display:flex; flex-direction:column; gap:8px;">
-                        <div class="progress-legend"><span class="ok">Success 65%</span><span class="no">Failure 35%</span></div>
-                        <div class="progress"><span class="ok" style="width:65%;"></span><span class="no" style="width:35%;"></span></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card card-pad card--hover">
-                <div style="display:flex; flex-direction:column; gap:12px;">
-                    <div>
-                        <div class="goal-title">Read 50 Books This Year</div>
-                        <div class="goal-author">by John Park</div>
-                    </div>
-                    <div class="goal-desc">Challenge myself to read 50 books across various genres throughout the year. Will document my progress...</div>
-                    <div class="meta">
-                        <span class="meta-item"><span class="icon icon--cal"></span>D-180</span>
-                        <span class="meta-item"><span class="icon icon--user"></span>18 people</span>
-                    </div>
-                    <div style="display:flex; flex-direction:column; gap:8px;">
-                        <div class="progress-legend"><span class="ok">Success 55%</span><span class="no">Failure 45%</span></div>
-                        <div class="progress"><span class="ok" style="width:55%;"></span><span class="no" style="width:45%;"></span></div>
-                    </div>
+            <div class="card card-pad-lg">
+                <h3 class="h3">목표가 아직 없어요</h3>
+                <p class="p" style="margin-top:6px;">첫 목표를 만들어 친구들의 예상을 뒤집어보세요.</p>
+                <div style="margin-top:14px;">
+                    <a class="btn btn--primary btn--md" href="<c:url value='/goal/create-form'/>">+ 목표 생성</a>
                 </div>
             </div>
         </c:otherwise>
