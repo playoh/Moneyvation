@@ -2,10 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <%
-  // Controller가 model에 "page"를 넣어주면 그걸 우선 사용
   String pageAttr = (String)request.getAttribute("page");
-
-  // 혹시 기존 방식(?page=...)도 남아있을 수 있어 fallback 지원
   String pageParam = request.getParameter("page");
 
   String finalPage = pageAttr;

@@ -12,6 +12,9 @@ public class GoalVO {
     private int minBet;
     private String allowFailure;
     private Date createdAt;
+    private String verificationImageUrl;
+    private Integer avgBetAmount;
+
 
     // 통계용 필드 (DB 테이블엔 없지만 쿼리 결과로 받아올 값들)
     private int totalParticipants;
@@ -19,6 +22,7 @@ public class GoalVO {
     private int successRate;
     private int failureRate;
     private int daysRemaining;
+
 
     // Getters and Setters
     public int getGoalId() { return goalId; }
@@ -62,4 +66,11 @@ public class GoalVO {
 
     public int getDaysRemaining() { return daysRemaining; }
     public void setDaysRemaining(int daysRemaining) { this.daysRemaining = daysRemaining; }
+
+    public String getVerificationImageUrl() { return verificationImageUrl; }
+    public void setVerificationImageUrl(String verificationImageUrl) { this.verificationImageUrl = verificationImageUrl; }
+
+    public Integer getAvgBetAmount() { return avgBetAmount; }
+    public void setAvgBetAmount(Integer avgBetAmount) { this.avgBetAmount = avgBetAmount; }
+
 }

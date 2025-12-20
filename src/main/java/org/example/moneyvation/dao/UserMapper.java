@@ -1,8 +1,9 @@
 package org.example.moneyvation.dao;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.example.moneyvation.vo.UserVO;
 
+@Mapper
 public interface UserMapper {
-    // 아이디로 회원 정보 가져오기
     UserVO getUser(String userId);
 }
