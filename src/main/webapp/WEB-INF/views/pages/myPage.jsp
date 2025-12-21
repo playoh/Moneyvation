@@ -1,6 +1,31 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<style>
+    .modal-overlay {
+        display: none; /* 평소엔 숨김 */
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+    .modal-content {
+        background: white;
+        padding: 24px;
+        border-radius: 16px;
+        width: 90%;
+        max-width: 500px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        position: relative;
+    }
+    .modal-overlay.active {
+        display: flex; /* 활성화되면 보임 */
+    }
+</style>
+
 <div class="stack" style="gap:16px;">
     <div class="card card-pad-lg">
         <div class="row-between">
@@ -29,11 +54,9 @@
                         </div>
 
                         <div class="actions">
-                            <!-- 수정 -->
                             <a class="btn btn--outline btn--md"
                                href="<c:url value='/goal/edit-form?goalId=${g.goalId}'/>">수정</a>
 
-                            <!-- ✅ 삭제: 컨트롤러는 POST /goal/delete -->
                             <form method="post" action="<c:url value='/goal/delete'/>" style="display:inline;">
                                 <input type="hidden" name="goalId" value="${g.goalId}"/>
                                 <button class="btn btn--danger btn--md"
@@ -41,9 +64,11 @@
                                         onclick="return confirm('정말 삭제할까요?');">삭제</button>
                             </form>
 
-                            <!-- ✅ 인증: 일단 detail로 이동(거기서 인증 업로드 UI를 붙이는 게 맞음) -->
-                            <a class="btn btn--ghost btn--md"
-                               href="<c:url value='/goal/detail?goalId=${g.goalId}'/>">인증</a>
+                            <button class="btn btn--ghost btn--md"
+                                    type="button"
+                                    onclick="openCertifyModal('${g.goalId}', '${g.title}')">
+                                인증
+                            </button>
                         </div>
                     </div>
                 </c:forEach>
@@ -61,3 +86,61 @@
         </c:choose>
     </div>
 </div>
+
+<div id="certifyModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="row-between" style="margin-bottom:16px;">
+            <h2 class="h2">목표 인증하기</h2>
+            <button type="button" class="btn btn--ghost" onclick="closeCertifyModal()" style="padding:4px 8px;">✕</button>
+        </div>
+
+        <p class="p-sm" id="modalGoalTitle" style="margin-bottom:16px; color:var(--primary);">
+        </p>
+
+        <form action="<c:url value='/goal/certify'/>" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="goalId" id="modalGoalId" value=""/>
+
+            <div class="stack" style="gap:12px;">
+                <div class="field">
+                    <div class="label">인증 사진</div>
+                    <input class="input" type="file" name="photo" accept="image/*" required/>
+                </div>
+
+                <div class="field">
+                    <div class="label">코멘트</div>
+                    <textarea class="textarea" name="note" placeholder="실천한 내용을 적어주세요" rows="3"></textarea>
+                </div>
+
+                <div class="row" style="gap:8px; justify-content:flex-end; margin-top:8px;">
+                    <button type="button" class="btn btn--outline btn--lg" onclick="closeCertifyModal()">취소</button>
+                    <button type="submit" class="btn btn--primary btn--lg">인증 업로드</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // 모달 열기
+    function openCertifyModal(goalId, title) {
+        const modal = document.getElementById('certifyModal');
+        // hidden input에 값 주입
+        document.getElementById('modalGoalId').value = goalId;
+        // 제목 표시
+        document.getElementById('modalGoalTitle').innerText = '"' + title + '" 목표를 인증합니다.';
+        // 모달 보이기
+        modal.classList.add('active');
+    }
+
+    // 모달 닫기
+    function closeCertifyModal() {
+        document.getElementById('certifyModal').classList.remove('active');
+    }
+
+    // 배경 클릭 시 닫기
+    document.getElementById('certifyModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeCertifyModal();
+        }
+    });
+</script>
