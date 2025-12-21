@@ -14,7 +14,8 @@
     </div>
 
     <!-- 인증 폼: 실제 업로드는 multipart 설정 후 연결 -->
-    <form class="form section" action="/goal/certify" method="post" enctype="multipart/form-data">
+    <form class="form section" action="<c:url value='/goal/certify'/>" method="post" enctype="multipart/form-data">
+
         <input type="hidden" name="goalId" value="${goal.goalId}"/>
 
         <div class="field">
@@ -24,18 +25,17 @@
                 <option value="text">Text</option>
                 <option value="checkin">Check-in</option>
             </select>
-            <div class="help">verificationType에 따라 서버 처리 분기 가능</div>
         </div>
 
         <div class="field">
-            <div class="label">Upload (optional)</div>
-            <input class="input" type="file" name="file"/>
-            <div class="help">multipart 설정 필요 (현재는 UI 구성)</div>
+            <div class="label">Upload Photo</div>
+            <input class="input" type="file" name="photo" required/>
+            <div class="help">인증샷을 선택해주세요.</div>
         </div>
 
         <div class="field">
             <div class="label">Message</div>
-            <textarea class="textarea" name="message" placeholder="인증 설명/메모"></textarea>
+            <textarea class="textarea" name="note" placeholder="인증 설명/메모"></textarea>
         </div>
 
         <div style="display:flex; gap:10px; flex-wrap:wrap;">
