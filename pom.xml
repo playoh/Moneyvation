@@ -14,13 +14,16 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
+
         <junit.version>5.10.2</junit.version>
-        <!-- Spring 버전 변수로 관리 -->
         <spring.version>5.3.23</spring.version>
+
+        <!-- cargo 실행 포트 -->
+        <server.port>8080</server.port>
     </properties>
 
     <dependencies>
-        <!-- 1. Spring Framework Core & MVC (이게 없어서 Controller가 안 된 겁니다) -->
+        <!-- 1. Spring Framework Core & MVC -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
@@ -32,7 +35,7 @@
             <version>${spring.version}</version>
         </dependency>
 
-        <!-- 2. Spring JDBC & Transaction (DB 연결 필수) -->
+        <!-- 2. Spring JDBC & Transaction -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
@@ -44,7 +47,7 @@
             <version>${spring.version}</version>
         </dependency>
 
-        <!-- 3. MyBatis 관련 -->
+        <!-- 3. MyBatis -->
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
@@ -56,20 +59,29 @@
             <version>2.1.2</version>
         </dependency>
 
-        <!-- 4. Database Driver (MySQL 기준) -->
+        <!-- 4. Database Driver -->
+        <!-- mysql-connector-java는 굳이 2개 필요없어서(마리아DB 쓰면) 하나로만 가도 됨.
+             하지만 너가 이미 둘 다 넣어둬서, 충돌은 거의 없으니 그대로 유지 가능 -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.33</version>
         </dependency>
+        <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <version>3.1.4</version>
+        </dependency>
 
-        <!-- 5. Servlet & JSP -->
+        <!-- 5. Servlet & JSP / JSTL -->
+        <!-- ✅ Tomcat 9 = Servlet 4.0 (javax.servlet.*) -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>4.0.1</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
@@ -89,22 +101,54 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- MariaDB Driver  -->
-        <dependency>
-            <groupId>org.mariadb.jdbc</groupId>
-            <artifactId>mariadb-java-client</artifactId>
-            <version>3.1.4</version>
-        </dependency>
-
     </dependencies>
 
     <build>
         <plugins>
+            <!-- WAR -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.2</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
             </plugin>
+
+            <!-- ✅ Tomcat7 플러그인 제거하고 Cargo로 Tomcat9 실행 -->
+            <plugin>
+                <groupId>org.codehaus.cargo</groupId>
+                <artifactId>cargo-maven3-plugin</artifactId>
+                <version>1.10.25</version>
+
+                <configuration>
+                    <container>
+                        <containerId>tomcat9x</containerId>
+                        <type>embedded</type>
+                    </container>
+
+                    <configuration>
+                        <type>standalone</type>
+                        <home>${project.build.directory}/tomcat9</home>
+                        <properties>
+                            <cargo.servlet.port>8080</cargo.servlet.port>
+                            <cargo.logging>high</cargo.logging>
+                        </properties>
+                    </configuration>
+
+                    <deployables>
+                        <deployable>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>${project.artifactId}</artifactId>
+                            <type>war</type>
+                            <properties>
+                                <context>/</context>
+                            </properties>
+                        </deployable>
+                    </deployables>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 </project>

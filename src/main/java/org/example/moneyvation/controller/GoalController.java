@@ -1,13 +1,17 @@
 package org.example.moneyvation.controller;
 
+import org.example.moneyvation.dao.BetMapper;
 import org.example.moneyvation.dao.GoalMapper;
+import org.example.moneyvation.vo.BetVO;
 import org.example.moneyvation.vo.GoalVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequestMapping("/goal")
@@ -16,89 +20,147 @@ public class GoalController {
     @Autowired
     private GoalMapper goalMapper;
 
-    // ==========================================
-    // 1. 화면 이동 기능 (이게 빠져 있었음!)
-    // ==========================================
+    @Autowired
+    private BetMapper betMapper;
 
-    /**
-     * [추가됨] 목표 생성 페이지 보여주기
-     * 요청 주소: /goal/create-form
-     */
     @GetMapping("/create-form")
     public String moveToCreateForm(Model model) {
-        // index.jsp에게 "create-goal.jsp를 끼워넣어라"라고 지시
-        // 아까 index.jsp에서 고친 이름("create-goal")과 똑같아야 함!
-        model.addAttribute("page", "create-goal");
+        model.addAttribute("page", "createGoal");
+        return "index";
+    }
+
+    @GetMapping("/edit-form")
+    public String moveToEditForm(@RequestParam("goalId") int goalId, Model model) {
+        GoalVO goal = goalMapper.getGoal(goalId);
+        model.addAttribute("goal", goal);
+        model.addAttribute("page", "editGoal");
         return "index";
     }
 
     /**
-     * [추가됨] 목표 수정 페이지 보여주기
-     * 요청 주소: /goal/edit-form?goalId=1
+     * ✅ goalDetail.jsp에 필요한 데이터:
+     * - goal
+     * - successBets (성공 베팅 목록)
+     * - failureBets (실패 베팅 목록)  ← 이름 통일!
      */
-    @GetMapping("/edit-form")
-    public String moveToEditForm(@RequestParam("goalId") int goalId, Model model) {
-        // 수정하려면 원래 내용을 채워놔야 하니까 DB에서 가져옴
+    @GetMapping("/detail")
+    public String getGoalDetail(@RequestParam("goalId") int goalId, Model model) {
         GoalVO goal = goalMapper.getGoal(goalId);
 
+        List<BetVO> successBets = betMapper.getBetsByGoalAndType(goalId, "SUCCESS");
+        List<BetVO> failureBets = betMapper.getBetsByGoalAndType(goalId, "FAIL");
+
+        // ✅ 인원수 기반 계산 (한 사람당 1행 구조라 length가 곧 인원수)
+        int successCount = (successBets == null) ? 0 : successBets.size();
+        int failureCount = (failureBets == null) ? 0 : failureBets.size();
+        int total = successCount + failureCount;
+
+        int successRate = 0;
+        int failureRate = 0;
+
+        if (total > 0) {
+            // 반올림(사람 기준)
+            successRate = (int) Math.round(successCount * 100.0 / total);
+            failureRate = 100 - successRate; // ✅ 합이 100 되게 보정
+        }
+
         model.addAttribute("goal", goal);
-        model.addAttribute("page", "edit-goal"); // index.jsp의 조건문 이름과 일치
+        model.addAttribute("successBets", successBets);
+        model.addAttribute("failureBets", failureBets);
+
+        // ✅ 도넛용 값 추가
+        model.addAttribute("successRateByCount", successRate);
+        model.addAttribute("failureRateByCount", failureRate);
+        model.addAttribute("totalBetters", total);
+
+        model.addAttribute("page", "goalDetail");
         return "index";
     }
 
-    // ==========================================
-    // 2. 데이터 처리 기능 (원래 있던 것들)
-    // ==========================================
-
-    // 목표 저장 처리
-    // GoalController.java
 
     @PostMapping("/create")
     public String createGoal(GoalVO vo, HttpSession session) {
-        // 1. 로그인 여부 확인
-        if (session.getAttribute("isLoggedIn") == null) {
+        Boolean loggedIn = (Boolean) session.getAttribute("isLoggedIn");
+        if (loggedIn == null || !loggedIn) {
             return "redirect:/user/login-form";
         }
 
-        // 2. 세션에서 로그인한 사용자 이름(또는 ID) 꺼내기
-        String currentUserName = (String) session.getAttribute("userName");
+        String userName = (String) session.getAttribute("userName");
+        String userId = (String) session.getAttribute("userId");
+        vo.setAuthor(userName != null ? userName : userId);
 
-        if (currentUserName == null) {
-            currentUserName = (String) session.getAttribute("userId");
-        }
-
-        vo.setAuthor(currentUserName);
-
-        // 4. DB 저장
         goalMapper.insertGoal(vo);
-
         return "redirect:/goal/detail?goalId=" + vo.getGoalId();
     }
 
-
-    // 목표 수정 처리
     @PostMapping("/update")
-    public String updateGoal(GoalVO vo) {
+    public String updateGoal(GoalVO vo, HttpSession session) {
+        Boolean loggedIn = (Boolean) session.getAttribute("isLoggedIn");
+        if (loggedIn == null || !loggedIn) {
+            return "redirect:/user/login-form";
+        }
         goalMapper.updateGoal(vo);
         return "redirect:/goal/detail?goalId=" + vo.getGoalId();
     }
 
-    // 목표 삭제 처리
-    @RequestMapping("/delete")
-    public String deleteGoal(@RequestParam("goalId") int goalId) {
+    @PostMapping("/delete")
+    public String deleteGoal(@RequestParam("goalId") int goalId, HttpSession session) {
+        Boolean loggedIn = (Boolean) session.getAttribute("isLoggedIn");
+        if (loggedIn == null || !loggedIn) {
+            return "redirect:/user/login-form";
+        }
         goalMapper.deleteGoal(goalId);
         return "redirect:/";
     }
 
-    // 목표 상세 보기
-    @GetMapping("/detail")
-    public String getGoalDetail(@RequestParam("goalId") int goalId, Model model) {
-        GoalVO goal = goalMapper.getGoal(goalId);
-        model.addAttribute("goal", goal);
+    @PostMapping("/certify")
+    public String certifyGoal(@RequestParam("goalId") int goalId,
+                              @RequestParam(value = "note", required = false) String note,
+                              @RequestParam("photo") MultipartFile photo,
+                              HttpSession session) {
 
-        // index.jsp의 "goal-detail" 부분 실행
-        model.addAttribute("page", "goal-detail");
+        Boolean loggedIn = (Boolean) session.getAttribute("isLoggedIn");
+        if (loggedIn == null || !loggedIn) {
+            return "redirect:/user/login-form";
+        }
 
-        return "index";
+        // TODO: photo 저장 + DB 반영(추후)
+        return "redirect:/goal/detail?goalId=" + goalId + "&certified=true";
+    }
+
+    /**
+     * ✅ goalDetail.jsp의 Place Bet Now 폼 action="/goal/bet"
+     * - betType: SUCCESS / FAIL
+     * - amount: 양수
+     */
+    @PostMapping("/bet")
+    public String placeBet(@RequestParam("goalId") int goalId,
+                           @RequestParam("betType") String betType,
+                           @RequestParam("amount") int amount,
+                           HttpSession session) {
+
+        Boolean loggedIn = (Boolean) session.getAttribute("isLoggedIn");
+        if (loggedIn == null || !loggedIn) {
+            return "redirect:/user/login-form";
+        }
+
+        if (!"SUCCESS".equals(betType) && !"FAIL".equals(betType)) {
+            return "redirect:/goal/detail?goalId=" + goalId + "&betError=type";
+        }
+        if (amount <= 0) {
+            return "redirect:/goal/detail?goalId=" + goalId + "&betError=amount";
+        }
+
+        String userId = (String) session.getAttribute("userId");
+
+        BetVO bet = new BetVO();
+        bet.setGoalId(goalId);
+        bet.setUserId(userId);
+        bet.setBetType(betType);
+        bet.setAmount(amount);
+
+        betMapper.insertBet(bet);
+
+        return "redirect:/goal/detail?goalId=" + goalId + "&betSaved=true";
     }
 }

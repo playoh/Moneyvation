@@ -1,86 +1,60 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<!-- 로그인 체크 -->
-<c:if test="${empty sessionScope.isLoggedIn or not sessionScope.isLoggedIn}">
-    <script>
-        alert('로그인이 필요한 서비스입니다.');
-        location.href = '../';
-    </script>
-</c:if>
+<div class="card card-pad" style="max-width: 760px; margin: 0 auto;">
+    <div class="kicker">CREATE</div>
+    <h2 class="h2" style="margin-top: 8px;">Create Goal</h2>
+    <p class="p" style="margin-top: 8px;">목표를 만들고 친구들의 베팅을 받아보세요.</p>
 
-<div class="container" style="padding:48px 24px; max-width:800px;">
-    <div class="mb-24">
-        <h1 style="margin-bottom:8px;">새 목표 만들기</h1>
-        <p class="muted">이루고 싶은 목표를 설정하고 베팅을 시작해보세요.</p>
-    </div>
-
-    <!-- action을 Controller 주소로 변경 -->
-    <form action="${pageContext.request.contextPath}/goal/create" method="post">
-
-        <!-- 1. 목표 제목 -->
-        <div class="mb-16">
-            <label class="small" style="font-weight:700;color:var(--color-text-primary);">
-                목표 제목
-            </label>
-            <input type="text" name="title" class="input" placeholder="예: 3개월 동안 5kg 감량하기" required />
+    <form class="form section" action="/goal/create" method="post">
+        <div class="field">
+            <div class="label">Title</div>
+            <input class="input" name="title" placeholder="예) 30일 동안 1일 1커밋" required/>
         </div>
 
-        <!-- 2. 목표 설명 -->
-        <div class="mb-16">
-            <label class="small" style="font-weight:700;color:var(--color-text-primary);">
-                목표 설명
-            </label>
-            <textarea name="description" class="input" rows="5" placeholder="구체적인 계획이나 다짐을 적어주세요." required></textarea>
+        <div class="field">
+            <div class="label">Description</div>
+            <textarea class="textarea" name="description" placeholder="목표 설명을 적어주세요."></textarea>
         </div>
 
-        <!-- 3. 목표 기간 -->
-        <div class="mb-16">
-            <label class="small" style="font-weight:700;color:var(--color-text-primary);">
-                목표 기간 (일)
-            </label>
-            <input type="number" name="duration" class="input" placeholder="예: 30" min="1" required />
-        </div>
-
-        <!-- 4. 검증 방식 -->
-        <div class="mb-16">
-            <label class="small" style="font-weight:700;color:var(--color-text-primary);">
-                검증 방식
-            </label>
-            <select name="verificationType" class="input">
-                <option value="photo">사진 업로드</option>
-                <option value="daily-log">일일 텍스트 로그</option>
-                <option value="external-proof">외부 증빙(링크/스크린샷)</option>
-            </select>
-        </div>
-
-        <!-- 5. 베팅 설정 카드 -->
-        <div class="card mb-24" style="background:#f8fafc;">
-            <h3 style="margin-bottom:12px;">베팅 설정</h3>
-
-            <div class="mb-16">
-                <label class="small">최소 베팅 금액 (P)</label>
-                <input type="number" name="minBet" class="input" value="1000" min="0" />
+        <div class="form-grid">
+            <div class="field">
+                <div class="label">Duration (days)</div>
+                <input class="input" type="number" name="duration" placeholder="30" min="1"/>
+                <div class="help">예: 7, 14, 30</div>
             </div>
 
-            <div class="mb-16">
-                <label class="small">실패 베팅 허용</label>
-                <select name="allowFailure" class="input">
-                    <option value="yes">네, 실패 베팅도 허용</option>
-                    <option value="no">아니오, 성공 베팅만 허용</option>
+            <div class="field">
+                <div class="label">Min Bet</div>
+                <div class="suffix-wrap">
+                    <input class="input has-suffix" type="number" name="minBet" placeholder="1000" min="0"/>
+                    <span class="suffix">₩</span>
+                </div>
+                <div class="help">최소 베팅 금액</div>
+            </div>
+        </div>
+
+        <div class="form-grid">
+            <div class="field">
+                <div class="label">Verification Type</div>
+                <select class="select" name="verificationType">
+                    <option value="photo">Photo</option>
+                    <option value="text">Text</option>
+                    <option value="checkin">Check-in</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <div class="label">Allow Failure</div>
+                <select class="select" name="allowFailure">
+                    <option value="true">Allow</option>
+                    <option value="false">Not Allow</option>
                 </select>
             </div>
         </div>
 
-        <!-- 6. 버튼 영역 -->
-        <div class="flex gap-12">
-            <a class="btn btn-ghost" href="${pageContext.request.contextPath}/WEB-INF/views/index.jsp?page=home">
-                취소
-            </a>
-            <button class="btn btn-primary" type="submit" style="flex:1;">
-                목표 생성하기
-            </button>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:4px;">
+            <button class="btn btn--primary btn--lg" type="submit">Create</button>
+            <a class="btn btn--outline btn--lg" href="<c:url value='/user/my-page'/>">Cancel</a>
         </div>
-
     </form>
 </div>

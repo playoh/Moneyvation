@@ -1,40 +1,33 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%
-    // 세션에서 로그인 여부 확인
-    Boolean loggedIn = (Boolean) session.getAttribute("isLoggedIn");
-    if (loggedIn == null) loggedIn = false;
-%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <header class="header">
     <div class="container header-inner">
-        <!-- 1. 로고 클릭 시 홈으로 이동 -->
-        <!-- 컨트롤러가 있으니 이제 ?page=home 파라미터 없이 그냥 루트(/)로 가도 됩니다 -->
-        <a href="<%=request.getContextPath()%>/ " class="logo">
-            <div class="logo-badge">M</div>
-            <div>Moneyvation</div>
-        </a>
-
-        <div class="flex gap-12">
-            <% if (!loggedIn) { %>
-            <!-- 2. 로그인 버튼 -->
-            <!-- 컨트롤러의 @GetMapping("/login") 으로 이동 -->
-            <a href="${pageContext.request.contextPath}/user/login-form" class="btn btn-ghost">로그인</a>
-
-            <!-- 3. 회원가입 버튼 -->
-            <a href="${pageContext.request.contextPath}/user/signup-form" class="btn btn-primary">
-                회원가입
+        <div class="row-between">
+            <a class="logo" href="<c:url value='/'/>">
+                <span class="logo-badge"></span>
+                <span>Moneyvation</span>
             </a>
-            <% } else { %>
-            <!-- 4. 마이페이지 버튼 -->
-            <!-- 컨트롤러의 /mypage 경로로 이동 (만드셔야 함) -->
-            <a class="btn btn-outline" href="${pageContext.request.contextPath}/user/my-page">마이페이지</a>
 
-            <!-- 5. 로그아웃 버튼 -->
-            <!-- 컨트롤러의 @RequestMapping("/logout") 으로 요청 -->
-            <a href="${pageContext.request.contextPath}/user/logout" class="btn btn-ghost">
-                로그아웃
-            </a>
-            <% } %>
+            <div class="row">
+                <c:choose>
+                    <c:when test="${not empty sessionScope.loginUser}">
+            <span class="chip">
+              <span class="avatar">${fn:substring(sessionScope.loginUser.userName,0,1)}</span>
+              ${sessionScope.loginUser.userName}
+            </span>
+
+                        <a class="btn btn--outline btn--md" href="<c:url value='/user/my-page'/>">My Page</a>
+                        <a class="btn btn--ghost btn--md" href="<c:url value='/user/logout'/>">Logout</a>
+                    </c:when>
+
+                    <c:otherwise>
+                        <a class="btn btn--ghost btn--md" href="<c:url value='/user/login-form'/>">Login</a>
+                        <a class="btn btn--primary btn--md" href="<c:url value='/user/signup-form'/>">Sign Up</a>
+                    </c:otherwise>
+                </c:choose>
+            </div>
         </div>
     </div>
 </header>

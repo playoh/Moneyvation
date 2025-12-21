@@ -1,53 +1,46 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%
-    Boolean loggedIn = (Boolean) session.getAttribute("isLoggedIn");
-    if (loggedIn == null || !loggedIn) {
-        response.sendRedirect(request.getContextPath() + "/index.jsp?page=home&msg=loginRequired");
-        return;
-    }
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-    String goalId = request.getParameter("goalId");
-    if (goalId == null) goalId = "1";
-%>
+<div class="card card-pad" style="max-width: 760px; margin: 0 auto;">
+    <div class="kicker">CERTIFY</div>
+    <h2 class="h2" style="margin-top:8px;">Goal Certification</h2>
+    <p class="p" style="margin-top:8px;">
+        목표 인증을 제출하세요. (현재는 기본 폼 UI 구성)
+    </p>
 
-<div class="container" style="padding:48px 24px; max-width:800px;">
-    <div class="mb-24">
-        <h1 style="margin-bottom:8px;">인증 사진 업로드</h1>
-        <p class="muted">진행 상황을 인증할 사진과 메모를 업로드하세요.</p>
+    <div class="panel panel-pad section" style="box-shadow:none;">
+        <div class="h3">${goal.title}</div>
+        <p class="p-sm" style="margin-top:6px;">by ${goal.author} · D-${goal.daysRemaining}</p>
     </div>
 
-    <div class="card mb-24">
-        <form action="<%=request.getContextPath()%>/WEB-INF/views/pages/certifyGoalAction.jsp"
-              method="post"
-              enctype="multipart/form-data">
+    <!-- 인증 폼: 실제 업로드는 multipart 설정 후 연결 -->
+    <form class="form section" action="/goal/certify" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="goalId" value="${goal.goalId}"/>
 
-            <input type="hidden" name="goalId" value="<%=goalId%>"/>
+        <div class="field">
+            <div class="label">Certification Type</div>
+            <select class="select" name="verificationType">
+                <option value="photo">Photo</option>
+                <option value="text">Text</option>
+                <option value="checkin">Check-in</option>
+            </select>
+            <div class="help">verificationType에 따라 서버 처리 분기 가능</div>
+        </div>
 
-            <div class="mb-16">
-                <label class="small" style="font-weight:700;color:var(--color-text-primary);">
-                    사진 업로드
-                </label>
-                <input class="input" type="file" name="photo" accept="image/*" required />
-                <div class="small" style="margin-top:8px;">JPG/PNG 권장</div>
-            </div>
+        <div class="field">
+            <div class="label">Upload (optional)</div>
+            <input class="input" type="file" name="file"/>
+            <div class="help">multipart 설정 필요 (현재는 UI 구성)</div>
+        </div>
 
-            <div class="mb-16">
-                <label class="small" style="font-weight:700;color:var(--color-text-primary);">
-                    메모 (선택)
-                </label>
-                <textarea class="input" name="note" rows="3" placeholder="간단한 메모를 남겨보세요."></textarea>
-            </div>
+        <div class="field">
+            <div class="label">Message</div>
+            <textarea class="textarea" name="message" placeholder="인증 설명/메모"></textarea>
+        </div>
 
-            <div class="flex gap-12">
-                <a class="btn btn-ghost"
-                   href="<%=request.getContextPath()%>/WEB-INF/views/index.jsp?page=my-page&tab=my-goals">
-                    돌아가기
-                </a>
-                <button class="btn btn-primary" type="submit" style="flex:1;">
-                    업로드
-                </button>
-            </div>
-
-        </form>
-    </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn btn--primary btn--lg" type="submit">Submit</button>
+            <a class="btn btn--outline btn--lg" href="<c:url value='/goal/detail?goalId=${goal.goalId}'/>">Back</a>
+        </div>
+    </form>
 </div>

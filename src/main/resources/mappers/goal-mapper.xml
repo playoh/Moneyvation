@@ -74,5 +74,78 @@
         FROM goal
         ORDER BY goal_id DESC
     </select>
+    <!-- ✅ 내가 만든 목표 목록 -->
+    <select id="getGoalsByAuthor" resultType="org.example.moneyvation.vo.GoalVO">
+        SELECT
+            goal_id as goalId,
+            title,
+            description,
+            author,
+            duration,
+            verification_type as verificationType,
+            min_bet as minBet,
+            allow_failure as allowFailure,
+            created_at as createdAt,
+            DATEDIFF(DATE_ADD(created_at, INTERVAL duration DAY), NOW()) as daysRemaining
+        FROM goal
+        WHERE author = #{author}
+        ORDER BY goal_id DESC
+    </select>
+    <select id="getGoalListSorted" resultType="org.example.moneyvation.vo.GoalVO">
+        SELECT
+        g.goal_id as goalId,
+        g.title,
+        g.description,
+        g.author,
+        g.duration,
+        g.verification_type as verificationType,
+        g.min_bet as minBet,
+        g.allow_failure as allowFailure,
+        g.created_at as createdAt,
+
+        -- ✅ 남은 기간
+        DATEDIFF(DATE_ADD(g.created_at, INTERVAL g.duration DAY), NOW()) as daysRemaining,
+
+        -- ✅ 베팅 인원수/총액 (없으면 0)
+        IFNULL(b.totalParticipants, 0) as totalParticipants,
+        IFNULL(b.totalBetAmount, 0) as totalBetAmount,
+
+        -- ✅ 인원수 기반 success/failure 퍼센트
+        CASE
+        WHEN IFNULL(b.totalParticipants, 0) = 0 THEN 0
+        ELSE ROUND(IFNULL(b.successCount, 0) * 100.0 / b.totalParticipants)
+        END as successRate,
+
+        CASE
+        WHEN IFNULL(b.totalParticipants, 0) = 0 THEN 0
+        ELSE 100 - ROUND(IFNULL(b.successCount, 0) * 100.0 / b.totalParticipants)
+        END as failureRate
+
+        FROM goal g
+        LEFT JOIN (
+        SELECT
+        goal_id,
+        COUNT(*) as totalParticipants,
+        SUM(amount) as totalBetAmount,
+        SUM(CASE WHEN bet_type = 'SUCCESS' THEN 1 ELSE 0 END) as successCount
+        FROM bets
+        GROUP BY goal_id
+        ) b ON b.goal_id = g.goal_id
+
+        <choose>
+            <when test="sort == 'popular'">
+                ORDER BY b.totalParticipants DESC, g.goal_id DESC
+            </when>
+            <when test="sort == 'highest'">
+                ORDER BY b.totalBetAmount DESC, g.goal_id DESC
+            </when>
+            <when test="sort == 'ending'">
+                ORDER BY DATEDIFF(DATE_ADD(g.created_at, INTERVAL g.duration DAY), NOW()) ASC, g.goal_id DESC
+            </when>
+            <otherwise>
+                ORDER BY g.goal_id DESC
+            </otherwise>
+        </choose>
+    </select>
 
 </mapper>

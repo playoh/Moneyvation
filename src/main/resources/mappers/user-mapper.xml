@@ -1,21 +1,32 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="org.example.moneyvation.dao.UserMapper">
 
-    <select id="getUser" resultType="user">
+    <!-- 로그인: user_id로 조회 -->
+    <select id="getUser" parameterType="string"
+            resultType="org.example.moneyvation.vo.UserVO">
         SELECT
-            user_id as userId,
-            password,
-            user_name as userName
+            user_id   AS userId,
+            password  AS password,
+            user_name AS userName
         FROM users
         WHERE user_id = #{userId}
     </select>
 
-    <insert id="insertUser">
-        INSERT INTO users (user_id, password, name, nickname, created_at)
-        VALUES (#{userId}, #{password}, #{userName}, #{nickname}, NOW())    </insert>
+    <!-- 아이디 중복 체크 -->
+    <select id="countByUserId" parameterType="string" resultType="int">
+        SELECT COUNT(*)
+        FROM users
+        WHERE user_id = #{userId}
+    </select>
+
+    <!-- 회원가입 -->
+    <insert id="insertUser" parameterType="org.example.moneyvation.vo.UserVO">
+        INSERT INTO users (user_id, password, user_name)
+        VALUES (#{userId}, #{password}, #{userName})
+    </insert>
 
 </mapper>
