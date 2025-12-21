@@ -5,7 +5,10 @@
   <h2 class="h2" style="margin-top: 8px;">Login</h2>
   <p class="p" style="margin-top: 8px;">아이디와 비밀번호로 로그인하세요.</p>
 
-  <form class="form section" action="/user/login" method="post">
+  <form class="form section"
+        action="${pageContext.request.contextPath}/user/login"
+        method="post">
+
     <div class="field">
       <div class="label">User ID</div>
       <input class="input" name="userId" placeholder="userId" required/>

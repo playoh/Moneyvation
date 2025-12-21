@@ -37,9 +37,14 @@ public class UserController {
         UserVO user = userMapper.getUser(userId);
 
         if (user != null && user.getPassword().equals(password)) {
+            // 기존 세션 값
             session.setAttribute("isLoggedIn", true);
             session.setAttribute("userId", user.getUserId());
             session.setAttribute("userName", user.getUserName());
+
+            // ✅ header.jsp가 보는 loginUser 객체 세팅
+            session.setAttribute("loginUser", user);
+
             System.out.println("로그인 성공: " + user.getUserName());
             return "redirect:/";
         } else {
@@ -47,6 +52,7 @@ public class UserController {
             return "redirect:/user/login-form?error=true";
         }
     }
+
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
