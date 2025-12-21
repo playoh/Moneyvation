@@ -41,20 +41,45 @@
                 <h3 class="h3">Verification Photo</h3>
 
                 <c:choose>
+                    <!-- ✅ 인증샷이 있는 경우: 사진 + 글귀 -->
                     <c:when test="${not empty goal.verificationImageUrl}">
-                        <img src="<c:url value='${goal.verificationImageUrl}'/>"
-                             alt="verification"
-                             style="border-radius:16px; border:1px solid var(--line);"/>
+                        <figure class="verifyWrap">
+                            <img class="verifyImg"
+                                 src="<c:url value='${goal.verificationImageUrl}'/>"
+                                 alt="verification photo"/>
+
+                            <figcaption class="verifyCaption">
+                                <div class="verifyTitle">✅ 인증 완료!</div>
+
+                                <!-- (선택) 인증 메시지 저장해두었다면 출력 -->
+                                <c:choose>
+                                    <c:when test="${not empty goal.verificationNote}">
+                                        <div class="verifyNote">
+                                            <c:out value="${goal.verificationNote}"/>
+                                        </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="verifyNote">
+                                            인증샷이 등록되었습니다. 좋은 흐름 유지해봐요 💪
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
+                            </figcaption>
+                        </figure>
                     </c:when>
+
+                    <!-- ✅ 인증샷이 없는 경우: 기존 placeholder UI 유지 -->
                     <c:otherwise>
                         <div class="photoBox">
                             <div class="stack" style="gap:6px; align-items:center;">
                                 <div style="font-size:36px;">🖼️</div>
                                 <div class="small">아직 인증샷이 없어요</div>
+                                <div class="small" style="color:#64748b;">인증을 제출하면 여기에 표시됩니다.</div>
                             </div>
                         </div>
                     </c:otherwise>
                 </c:choose>
+
             </div>
         </div>
 
