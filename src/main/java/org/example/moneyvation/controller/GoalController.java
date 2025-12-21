@@ -89,9 +89,41 @@ public class GoalController {
         String userId = (String) session.getAttribute("userId");
         vo.setAuthor(userName != null ? userName : userId);
 
+        java.sql.Date start = vo.getStartDate();
+        java.sql.Date end = vo.getEndDate();
+        Integer dur = vo.getDuration();
+
+        // startDate 없으면 오늘
+        if (start == null) {
+            start = new java.sql.Date(System.currentTimeMillis());
+            vo.setStartDate(start);
+        }
+
+        // endDate 있으면 duration 재계산
+        if (end != null) {
+            long diffMillis = end.getTime() - start.getTime();
+            int days = (int) Math.ceil(diffMillis / (1000.0 * 60 * 60 * 24));
+            vo.setDuration(Math.max(days, 1));
+        }
+        // endDate 없고 duration 있으면 endDate 계산
+        else if (dur != null && dur > 0) {
+            long endMillis = start.getTime() + (long) dur * 24 * 60 * 60 * 1000;
+            vo.setEndDate(new java.sql.Date(endMillis));
+        }
+        // 둘 다 없으면 기본 7일
+        else {
+            vo.setDuration(7);
+            long endMillis = start.getTime() + 7L * 24 * 60 * 60 * 1000;
+            vo.setEndDate(new java.sql.Date(endMillis));
+        }
+
+        // minBet도 null이면 0으로 안전 처리
+        if (vo.getMinBet() == null) vo.setMinBet(0);
+
         goalMapper.insertGoal(vo);
         return "redirect:/goal/detail?goalId=" + vo.getGoalId();
     }
+
 
     @PostMapping("/update")
     public String updateGoal(GoalVO vo, HttpSession session) {
@@ -99,9 +131,52 @@ public class GoalController {
         if (loggedIn == null || !loggedIn) {
             return "redirect:/user/login-form";
         }
+
+        java.sql.Date start = vo.getStartDate();
+        java.sql.Date end = vo.getEndDate();
+        Integer dur = vo.getDuration();
+
+        // startDate 비면 기존 값 유지(없으면 오늘)
+        if (start == null) {
+            GoalVO old = goalMapper.getGoal(vo.getGoalId());
+            if (old != null && old.getStartDate() != null) start = old.getStartDate();
+            else start = new java.sql.Date(System.currentTimeMillis());
+            vo.setStartDate(start);
+        }
+
+        // endDate 있으면 duration 재계산
+        if (end != null) {
+            long diffMillis = end.getTime() - start.getTime();
+            int days = (int) Math.ceil(diffMillis / (1000.0 * 60 * 60 * 24));
+            vo.setDuration(Math.max(days, 1));
+        }
+        // endDate 없고 duration 있으면 endDate 계산
+        else if (dur != null && dur > 0) {
+            long endMillis = start.getTime() + (long) dur * 24 * 60 * 60 * 1000;
+            vo.setEndDate(new java.sql.Date(endMillis));
+        }
+        // 둘 다 없으면 기존 값 유지(없으면 7일)
+        else {
+            GoalVO old = goalMapper.getGoal(vo.getGoalId());
+            if (old != null) {
+                Integer oldDur = old.getDuration();
+                vo.setDuration((oldDur != null && oldDur > 0) ? oldDur : 7);
+                vo.setEndDate(old.getEndDate());
+            } else {
+                vo.setDuration(7);
+                long endMillis = start.getTime() + 7L * 24 * 60 * 60 * 1000;
+                vo.setEndDate(new java.sql.Date(endMillis));
+            }
+        }
+
+        if (vo.getMinBet() == null) vo.setMinBet(0);
+
         goalMapper.updateGoal(vo);
         return "redirect:/goal/detail?goalId=" + vo.getGoalId();
     }
+
+
+
 
     @PostMapping("/delete")
     public String deleteGoal(@RequestParam("goalId") int goalId, HttpSession session) {
