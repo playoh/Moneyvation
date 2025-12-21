@@ -1,26 +1,39 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<div class="card card-pad" style="max-width: 520px; margin: 0 auto;">
-  <div class="kicker">WELCOME BACK</div>
-  <h2 class="h2" style="margin-top: 8px;">Login</h2>
-  <p class="p" style="margin-top: 8px;">아이디와 비밀번호로 로그인하세요.</p>
+<div class="auth-wrap">
 
-  <form class="form section"
-        action="${pageContext.request.contextPath}/user/login"
-        method="post">
+  <div class="auth-card">
 
-    <div class="field">
-      <div class="label">User ID</div>
-      <input class="input" name="userId" placeholder="userId" required/>
-      <div class="help">예: moneyvation01</div>
+    <div class="auth-head">
+      <div class="small" style="color:#6366f1; font-weight:900; letter-spacing:1px; margin-bottom:6px;">
+        WELCOME BACK
+      </div>
+      <h1 class="auth-title">Login</h1>
+      <p class="auth-sub">아이디와 비밀번호로 로그인하세요.</p>
     </div>
 
-    <div class="field">
-      <div class="label">Password</div>
-      <input class="input" type="password" name="password" placeholder="password" required/>
-    </div>
+    <form class="auth-form" action="<c:url value='/user/login'/>" method="post">
 
-    <button class="btn btn--primary btn--lg btn--full" type="submit">Login</button>
-    <a class="btn btn--ghost btn--md btn--full" href="/">Back to Home</a>
-  </form>
+      <div class="field">
+        <label class="label">User ID</label>
+        <input class="input" type="text" name="userId" placeholder="아이디를 입력하세요" required/>
+      </div>
+
+      <div class="field">
+        <label class="label">Password</label>
+        <input class="input" type="password" name="password" placeholder="비밀번호를 입력하세요" required/>
+      </div>
+
+      <div class="stack" style="gap:10px; margin-top:10px;">
+        <button class="btn btn--primary btn--lg btn--full" type="submit">
+          Login
+        </button>
+        <a class="btn btn--ghost btn--md btn--full" href="<c:url value='/'/>">
+          Back to Home
+        </a>
+      </div>
+
+    </form>
+  </div>
 </div>
