@@ -124,8 +124,42 @@ public class GoalController {
             return "redirect:/user/login-form";
         }
 
-        // TODO: photo 저장 + DB 반영(추후)
-        return "redirect:/goal/detail?goalId=" + goalId + "&certified=true";
+        // 1. ✅ 프로젝트 내부의 실제 저장 경로를 알아냅니다.
+        // 결과 예시: .../webapp/resources/img/
+        String uploadFolder = session.getServletContext().getRealPath("/resources/img/");
+
+        if (!photo.isEmpty()) {
+            try {
+                // 폴더가 없으면 생성 (혹시 모르니 안전장치)
+                java.io.File dir = new java.io.File(uploadFolder);
+                if (!dir.exists()) dir.mkdirs();
+
+                // 2. 파일명 생성 (중복 방지)
+                String uuid = java.util.UUID.randomUUID().toString();
+                String originalFilename = photo.getOriginalFilename();
+                String saveFileName = uuid + "_" + originalFilename;
+
+                // 3. 파일 저장
+                java.io.File saveFile = new java.io.File(uploadFolder, saveFileName);
+                photo.transferTo(saveFile);
+
+                // 4. ✅ DB에 넣을 경로 (웹에서 접근할 경로)
+                // mvc:resources가 /resources/** 를 처리해주므로 바로 접근 가능
+                String dbFilePath = "/resources/img/" + saveFileName;
+
+                // 5. DB 업데이트
+                GoalVO updateGoal = new GoalVO();
+                updateGoal.setGoalId(goalId);
+                updateGoal.setVerificationImageUrl(dbFilePath);
+
+                goalMapper.updateVerificationImage(updateGoal);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return "redirect:/goal/detail?goalId=" + goalId;
     }
 
     /**

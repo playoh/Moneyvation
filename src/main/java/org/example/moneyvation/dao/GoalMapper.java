@@ -12,6 +12,7 @@ public interface GoalMapper {
     void updateGoal(GoalVO vo);
     void deleteGoal(int goalId);
     GoalVO getGoal(int goalId);
+    void updateVerificationImage(GoalVO goal);
 
     // 기존
     List<GoalVO> getGoalList();

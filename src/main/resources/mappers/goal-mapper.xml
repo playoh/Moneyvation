@@ -148,4 +148,10 @@
         </choose>
     </select>
 
+    <update id="updateVerificationImage" parameterType="org.example.moneyvation.vo.GoalVO">
+        UPDATE goals
+        SET verification_image_url = #{verificationImageUrl}
+        WHERE goal_id = #{goalId}
+    </update>
+
 </mapper>
