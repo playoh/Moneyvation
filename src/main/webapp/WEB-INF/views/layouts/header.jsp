@@ -18,7 +18,7 @@
               ${sessionScope.loginUser.userName}
             </span>
 
-                        <a class="btn btn--outline btn--md" href="<c:url value='/user/my-page'/>">My Page</a>
+                        <a class="btn btn--outline btn--lg" href="<c:url value='/user/myPage'/>">My Page</a>
                         <a class="btn btn--ghost btn--md" href="<c:url value='/user/logout'/>">Logout</a>
                     </c:when>
 
