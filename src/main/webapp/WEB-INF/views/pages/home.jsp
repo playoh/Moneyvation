@@ -65,9 +65,20 @@
                             </c:choose>
                         </div>
 
-                        <div class="meta">
+                        <div class="meta" style="display:flex; flex-wrap:wrap; gap:8px;">
                             <span class="meta-item"><span class="icon icon--cal"></span>D-${g.daysRemaining}</span>
                             <span class="meta-item"><span class="icon icon--user"></span>${g.totalParticipants} people</span>
+
+                            <span class="meta-item">Start: <b><c:out value="${empty g.startDate ? '-' : g.startDate}"/></b></span>
+                            <span class="meta-item">End: <b><c:out value="${empty g.endDate ? '-' : g.endDate}"/></b></span>
+
+                            <span class="meta-item">Category: <b><c:out value="${empty g.category ? '-' : g.category}"/></b></span>
+                            <span class="meta-item">Difficulty: <b><c:out value="${empty g.difficulty ? '-' : g.difficulty}"/></b></span>
+
+                            <span class="meta-item">Duration: <b>${g.duration}d</b></span>
+                            <span class="meta-item">MinBet: <b>₩${g.minBet}</b></span>
+                            <span class="meta-item">Verify: <b><c:out value="${g.verificationType}"/></b></span>
+                            <span class="meta-item">AllowFail: <b><c:out value="${g.allowFailure}"/></b></span>
                         </div>
 
                         <div style="display:flex; flex-direction:column; gap:8px;">
