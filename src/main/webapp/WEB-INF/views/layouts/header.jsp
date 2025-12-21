@@ -21,10 +21,9 @@
             <a href="${pageContext.request.contextPath}/user/login-form" class="btn btn-ghost">로그인</a>
 
             <!-- 3. 회원가입 버튼 -->
-            <button class="btn btn-primary" type="button"
-                    onclick="alert('회원가입 기능 준비중');">
+            <a href="${pageContext.request.contextPath}/user/signup-form" class="btn btn-primary">
                 회원가입
-            </button>
+            </a>
             <% } else { %>
             <!-- 4. 마이페이지 버튼 -->
             <!-- 컨트롤러의 /mypage 경로로 이동 (만드셔야 함) -->

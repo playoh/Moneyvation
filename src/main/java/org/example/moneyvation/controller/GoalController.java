@@ -51,12 +51,30 @@ public class GoalController {
     // ==========================================
 
     // 목표 저장 처리
+    // GoalController.java
+
     @PostMapping("/create")
     public String createGoal(GoalVO vo, HttpSession session) {
-        // (필요 시 로그인 유저 ID 세팅)
+        // 1. 로그인 여부 확인
+        if (session.getAttribute("isLoggedIn") == null) {
+            return "redirect:/user/login-form";
+        }
+
+        // 2. 세션에서 로그인한 사용자 이름(또는 ID) 꺼내기
+        String currentUserName = (String) session.getAttribute("userName");
+
+        if (currentUserName == null) {
+            currentUserName = (String) session.getAttribute("userId");
+        }
+
+        vo.setAuthor(currentUserName);
+
+        // 4. DB 저장
         goalMapper.insertGoal(vo);
+
         return "redirect:/goal/detail?goalId=" + vo.getGoalId();
     }
+
 
     // 목표 수정 처리
     @PostMapping("/update")

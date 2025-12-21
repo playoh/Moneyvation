@@ -94,4 +94,23 @@ public class UserController {
 
         return "index"; // index.jsp로 이동
     }
+
+    @GetMapping("/signup-form")
+    public String showSignupForm(Model model) {
+        model.addAttribute("page", "signup"); // index.jsp의 if문 조건("signup")
+        return "index";
+    }
+
+    // [필수 추가] 가입하기 버튼 눌렀을 때 실행되는 메서드
+    @PostMapping("/signup") // JSP의 form action="/user/signup" 과 짝꿍입니다.
+    public String processSignup(UserVO vo) {
+        // 1. DB에 저장
+        userMapper.insertUser(vo);
+
+        System.out.println("회원가입 성공: " + vo.getUserId());
+
+        // 2. 가입 끝나면 로그인 화면으로 이동
+        return "redirect:/user/login-form?msg=signupSuccess";
+    }
+
 }

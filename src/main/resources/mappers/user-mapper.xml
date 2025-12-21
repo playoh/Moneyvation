@@ -14,4 +14,8 @@
         WHERE user_id = #{userId}
     </select>
 
+    <insert id="insertUser">
+        INSERT INTO users (user_id, password, name, nickname, created_at)
+        VALUES (#{userId}, #{password}, #{userName}, #{nickname}, NOW())    </insert>
+
 </mapper>

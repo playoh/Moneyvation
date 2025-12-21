@@ -27,6 +27,9 @@
 
   else if (pageName.equals("login"))
     contentPage = "/WEB-INF/views/pages/login.jsp";
+
+  else if (pageName.equals("signup"))
+    contentPage = "/WEB-INF/views/pages/signin.jsp";
 %>
 
 <!DOCTYPE html>

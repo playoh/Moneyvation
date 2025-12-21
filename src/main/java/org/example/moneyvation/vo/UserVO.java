@@ -4,6 +4,7 @@ public class UserVO {
     private String userId;
     private String password;
     private String userName; // 사용자 이름 (필요하면 추가)
+    private String nickname;
 
     // 기본 생성자
     public UserVO() {}
@@ -27,4 +28,6 @@ public class UserVO {
     public void setUserName(String userName) {
         this.userName = userName;
     }
+    public String getNickname() { return nickname; }
+    public void setNickname(String nickname) { this.nickname = nickname; }
 }
