@@ -15,7 +15,7 @@ public class GoalVO {
 
     private Integer duration;        // (유지) DB: duration
     private String verificationType; // DB: verification_type
-    private Integer minBet;             // DB: min_bet
+    private Integer minBet;          // DB: min_bet
     private String allowFailure;     // DB: allow_failure
 
     private String category;         // DB: category
@@ -24,6 +24,10 @@ public class GoalVO {
     // 기타 기존 필드
     private Date createdAt;
     private String verificationImageUrl;
+
+    // ✅ [추가됨] 인증글 내용 (DB: verification_note)
+    private String verificationNote;
+
     private Integer avgBetAmount;
 
     // 통계용 필드
@@ -75,6 +79,10 @@ public class GoalVO {
 
     public String getVerificationImageUrl() { return verificationImageUrl; }
     public void setVerificationImageUrl(String verificationImageUrl) { this.verificationImageUrl = verificationImageUrl; }
+
+    // ✅ [추가됨] verificationNote Getter/Setter
+    public String getVerificationNote() { return verificationNote; }
+    public void setVerificationNote(String verificationNote) { this.verificationNote = verificationNote; }
 
     public Integer getAvgBetAmount() { return avgBetAmount; }
     public void setAvgBetAmount(Integer avgBetAmount) { this.avgBetAmount = avgBetAmount; }
