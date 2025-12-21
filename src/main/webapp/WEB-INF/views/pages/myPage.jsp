@@ -2,9 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <style>
-    /* 모달 배경 (어둡게 처리) */
     .modal-overlay {
-        display: none; /* 기본적으로 숨김 */
+        display: none; /* 평소엔 숨김 */
         position: fixed;
         top: 0; left: 0;
         width: 100%; height: 100%;
@@ -13,7 +12,6 @@
         justify-content: center;
         align-items: center;
     }
-    /* 모달창 본체 */
     .modal-content {
         background: white;
         padding: 24px;
@@ -23,9 +21,8 @@
         box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         position: relative;
     }
-    /* 모달 활성화 시 보이기 */
     .modal-overlay.active {
-        display: flex;
+        display: flex; /* 활성화되면 보임 */
     }
 </style>
 
@@ -106,12 +103,12 @@
             <div class="stack" style="gap:12px;">
                 <div class="field">
                     <div class="label">인증 사진</div>
-                    <input class="input" type="file" name="file" accept="image/*" required/>
+                    <input class="input" type="file" name="photo" accept="image/*" required/>
                 </div>
 
                 <div class="field">
                     <div class="label">코멘트</div>
-                    <textarea class="textarea" name="message" placeholder="오늘 실천한 내용을 적어주세요" rows="3"></textarea>
+                    <textarea class="textarea" name="note" placeholder="실천한 내용을 적어주세요" rows="3"></textarea>
                 </div>
 
                 <div class="row" style="gap:8px; justify-content:flex-end; margin-top:8px;">
@@ -124,25 +121,23 @@
 </div>
 
 <script>
-    // 모달 열기 함수
+    // 모달 열기
     function openCertifyModal(goalId, title) {
-        // 1. 모달창 요소 가져오기
         const modal = document.getElementById('certifyModal');
-        // 2. hidden input에 goalId 값 넣기 (서버로 전송하기 위해)
+        // hidden input에 값 주입
         document.getElementById('modalGoalId').value = goalId;
-        // 3. 사용자에게 보여줄 제목 설정
+        // 제목 표시
         document.getElementById('modalGoalTitle').innerText = '"' + title + '" 목표를 인증합니다.';
-        // 4. 모달 보이게 하기 (active 클래스 추가)
+        // 모달 보이기
         modal.classList.add('active');
     }
 
-    // 모달 닫기 함수
+    // 모달 닫기
     function closeCertifyModal() {
-        const modal = document.getElementById('certifyModal');
-        modal.classList.remove('active');
+        document.getElementById('certifyModal').classList.remove('active');
     }
 
-    // (선택사항) 배경 클릭 시 닫기
+    // 배경 클릭 시 닫기
     document.getElementById('certifyModal').addEventListener('click', function(e) {
         if (e.target === this) {
             closeCertifyModal();
