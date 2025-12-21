@@ -47,20 +47,10 @@
                                  alt="verification photo"/>
 
                             <figcaption class="verifyCaption">
-                                <div class="verifyTitle">✅ 인증 완료!</div>
-
-                                <c:choose>
-                                    <c:when test="${not empty goal.verificationNote}">
-                                        <div class="verifyNote">
-                                            <c:out value="${goal.verificationNote}"/>
-                                        </div>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <div class="verifyNote">
-                                            인증샷이 등록되었습니다. 좋은 흐름 유지해봐요 💪
-                                        </div>
-                                    </c:otherwise>
-                                </c:choose>
+                                <div class="verifyTitle">인증 완료!</div>
+                                <div class="verifyNote">
+                                    인증샷이 등록되었습니다. 좋은 흐름 유지해봐요!
+                                </div>
                             </figcaption>
                         </figure>
                     </c:when>

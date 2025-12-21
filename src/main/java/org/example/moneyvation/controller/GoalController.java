@@ -199,13 +199,13 @@ public class GoalController {
             return "redirect:/user/login-form";
         }
 
-        // 1. ✅ 프로젝트 내부의 실제 저장 경로를 알아냅니다.
-        // 결과 예시: .../webapp/resources/img/
-        String uploadFolder = session.getServletContext().getRealPath("/resources/img/");
+        // 1. ✅ target/uploads/ 폴더에 저장
+        String projectRoot = System.getProperty("user.dir");
+        String uploadFolder = projectRoot + "/target/uploads/";
 
         if (!photo.isEmpty()) {
             try {
-                // 폴더가 없으면 생성 (혹시 모르니 안전장치)
+                // 폴더가 없으면 생성
                 java.io.File dir = new java.io.File(uploadFolder);
                 if (!dir.exists()) dir.mkdirs();
 
@@ -219,8 +219,7 @@ public class GoalController {
                 photo.transferTo(saveFile);
 
                 // 4. ✅ DB에 넣을 경로 (웹에서 접근할 경로)
-                // mvc:resources가 /resources/** 를 처리해주므로 바로 접근 가능
-                String dbFilePath = "/resources/img/" + saveFileName;
+                String dbFilePath = "/uploads/" + saveFileName;
 
                 // 5. DB 업데이트
                 GoalVO updateGoal = new GoalVO();

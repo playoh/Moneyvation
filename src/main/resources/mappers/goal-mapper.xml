@@ -69,6 +69,7 @@
             category,
             difficulty,
             created_at AS createdAt,
+            verification_image_url AS verificationImageUrl,
 
             0 AS totalParticipants,
             0 AS totalBetAmount,
