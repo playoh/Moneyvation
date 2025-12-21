@@ -189,7 +189,7 @@
     </select>
 
     <update id="updateVerificationImage" parameterType="org.example.moneyvation.vo.GoalVO">
-        UPDATE goals
+        UPDATE goal
         SET verification_image_url = #{verificationImageUrl}
         WHERE goal_id = #{goalId}
     </update>
