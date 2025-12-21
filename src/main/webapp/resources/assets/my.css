@@ -641,3 +641,36 @@ img { max-width: 100%; display: block; }
     background:#ef4444;
     box-shadow:none;
 }
+/* 인증샷이 있을 때 */
+.verifyWrap{
+    margin: 0;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.verifyImg{
+    display:block;
+    width:100%;
+    max-height: 360px;
+    object-fit: cover;
+}
+
+.verifyCaption{
+    padding: 12px 14px;
+    border-top: 1px solid var(--line);
+    background: #f8fafc;
+}
+
+.verifyTitle{
+    font-weight: 900;
+    color: var(--text);
+    margin-bottom: 6px;
+}
+
+.verifyNote{
+    font-size: 13px;
+    color: #475569;
+    line-height: 1.5;
+}
