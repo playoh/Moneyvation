@@ -13,9 +13,9 @@ public class GoalVO {
     private java.sql.Date startDate; // DB: start_date (DATE)
     private java.sql.Date endDate;   // DB: end_date (DATE)
 
-    private int duration;            // (유지) DB: duration
+    private Integer duration;        // (유지) DB: duration
     private String verificationType; // DB: verification_type
-    private int minBet;              // DB: min_bet
+    private Integer minBet;             // DB: min_bet
     private String allowFailure;     // DB: allow_failure
 
     private String category;         // DB: category
@@ -52,14 +52,14 @@ public class GoalVO {
     public java.sql.Date getEndDate() { return endDate; }
     public void setEndDate(java.sql.Date endDate) { this.endDate = endDate; }
 
-    public int getDuration() { return duration; }
-    public void setDuration(int duration) { this.duration = duration; }
+    public Integer getDuration() { return duration; }
+    public void setDuration(Integer duration) { this.duration = duration; }
 
     public String getVerificationType() { return verificationType; }
     public void setVerificationType(String verificationType) { this.verificationType = verificationType; }
 
-    public int getMinBet() { return minBet; }
-    public void setMinBet(int minBet) { this.minBet = minBet; }
+    public Integer getMinBet() { return minBet; }
+    public void setMinBet(Integer minBet) { this.minBet = minBet; }
 
     public String getAllowFailure() { return allowFailure; }
     public void setAllowFailure(String allowFailure) { this.allowFailure = allowFailure; }
